@@ -1,4 +1,4 @@
-import React,{useState} from "react"
+import React,{useState,useEffect} from "react"
 import { useHistory } from "react-router-dom";
 
 import styles from "../styles/Navi.module.css"
@@ -16,6 +16,22 @@ const Navi = ()=>{
       const history = useHistory();
       const [open, setOpen] = React.useState(false);
       const anchorRef = React.useRef(null);
+
+      const [scrollY, setScrollY] = useState(0);
+
+      function logit() {
+            setScrollY(window.pageYOffset);
+      }
+
+      useEffect(() => {
+            function watchScroll() {
+                  window.addEventListener("scroll", logit);
+            }
+            watchScroll();
+            return () => {
+                  window.removeEventListener("scroll", logit);
+            };
+      });
 
       const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
@@ -53,7 +69,7 @@ const Navi = ()=>{
       
 
       return( 
-      <Navbar variant="dark" expand="lg" fixed="top" className={styles.navi}>
+      <Navbar bg={scrollY > 70 && "secondary"} variant="dark" expand="lg" fixed="top" className={styles.navi}>
             <Container>
                   <Navbar.Brand href="/" className={styles.brand}>HRMS</Navbar.Brand>
                   
