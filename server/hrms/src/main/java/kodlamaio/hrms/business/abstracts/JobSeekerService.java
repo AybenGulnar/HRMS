@@ -21,4 +21,6 @@ public interface JobSeekerService {
     List<School> getSchoolsByUserId(int id);
 
     List<Experience> getExperiencesByUserId(int id);
+
+    Result login(String eposta,String password);
 }

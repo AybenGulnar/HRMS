@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+::selection{
+  background-color: black;
+  color: white;
+}
+
+.hero{
+  background-size: cover;
+  background-position: center;
+  padding: 182px 0 102px 0;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 0;
+  background-size: cover;
+  background-image: url("./assets/banner.png");
+}
+
+.hero h3{
+  font-size: 56px;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 0;
+  text-transform: capitalize;
+}

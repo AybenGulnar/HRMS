@@ -1,4 +1,5 @@
 package kodlamaio.hrms.api.controllers;
+import kodlamaio.hrms.entities.dtos.UserLoginDto;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.core.utilities.results.Result;
@@ -32,6 +33,11 @@ public class EmployerController {
     @PostMapping("/register")
     public Result register(@RequestBody EmployerDto employerDto){
         return this.employerService.register(employerDto);
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody UserLoginDto userLoginDto){
+        return this.employerService.login(userLoginDto.getEmail(),userLoginDto.getPassword());
     }
 
     @PostMapping("/confirmemail")

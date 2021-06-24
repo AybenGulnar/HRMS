@@ -71,6 +71,20 @@ public class JobSeekerManager implements JobSeekerService {
         return new SuccessDataResult<JobSeeker>(jobSeeker,"İş arayan eklendi.");
     }
 
+    public Result login(String eposta,String password){
+        JobSeeker jobSeeker = new JobSeeker();
+        jobSeeker = this.jobSeekerDao.getByePosta(eposta);
+
+        if(!jobSeeker.getEPosta().isEmpty()){
+            if(password.equals(jobSeeker.getPassword())){
+                return new SuccessDataResult<JobSeeker>(jobSeeker,"Girş Başarılı");
+            }
+        }
+
+        return new ErrorResult("Kullanıcı adı veya şifre yanlış");
+
+    }
+
     @Override
     public Result MailConfirm(EmailDto emailDto) {
 

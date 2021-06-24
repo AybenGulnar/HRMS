@@ -39,6 +39,12 @@ public class JobAdvert {
     @Column(name = "open_position_count")
     private int openPositionCount;
 
+    @Column(name ="is_remote")
+    private boolean isRemote;
+
+    @Column(name="is_full_time")
+    private boolean isFullTime;
+
     @Column(name = "deadline")
     private Date deadline;
 
@@ -47,6 +53,7 @@ public class JobAdvert {
 
     @Column(name="is_actived")
     private boolean isActived;
+
 
     @ManyToOne()
     @JoinColumn(name="user_id")

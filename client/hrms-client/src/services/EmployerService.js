@@ -15,7 +15,12 @@ const register = async (employer)=>{
       return res.data
 }
 
+const login = async (email,password)=>{
+      const res = await axios.post(url+"login",{email,password})
 
-const service = {getAll,register}
+      return res.data
+}
+
+const service = {getAll,login,register}
 
 export default service

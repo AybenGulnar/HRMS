@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RestController
 @RequestMapping("/api/jobadverts")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JobAdvertController {
 
     private JobAdvertService jobAdvertService;

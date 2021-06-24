@@ -69,6 +69,20 @@ public class EmployerManager implements EmployerService {
         return new SuccessDataResult<Employer>(employer,"İş veren eklendi.");
     }
 
+    public Result login(String eposta,String password){
+        Employer employer = new Employer();
+        employer = this.employerDao.getByePosta(eposta);
+
+        if(!employer.getEPosta().isEmpty()){
+            if(password.equals(employer.getPassword())){
+                return new SuccessDataResult<Employer>(employer,"Girş Başarılı");
+            }
+        }
+
+        return new ErrorResult("Kullanıcı adı veya şifre yanlış");
+
+    }
+
     @Override
     public Result MailConfirm(EmailDto emailDto) {
 

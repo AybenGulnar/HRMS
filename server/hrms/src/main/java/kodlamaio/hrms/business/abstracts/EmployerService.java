@@ -11,4 +11,5 @@ public interface EmployerService {
     List<Employer> getall();
     Result register(EmployerDto employerDto);
     Result MailConfirm(EmailDto emailDto);
+    Result login(String eposta,String password);
 }

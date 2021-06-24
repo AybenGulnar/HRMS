@@ -1,5 +1,6 @@
 package kodlamaio.hrms.api.controllers;
 
+import kodlamaio.hrms.entities.dtos.UserLoginDto;
 import org.springframework.http.ResponseEntity;
 import kodlamaio.hrms.core.services.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,11 @@ public class JobSeekerController {
     @PostMapping("/register")
     public Result register(@RequestBody JobSeekerRegisterDto jobSeekerRegisterDto){
         return this.jobSeekerService.register(jobSeekerRegisterDto);
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody UserLoginDto userLoginDto){
+        return this.jobSeekerService.login(userLoginDto.getEmail(),userLoginDto.getPassword());
     }
 
     @PostMapping("/add")
