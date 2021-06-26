@@ -4,7 +4,6 @@ import {Container,Row,Col} from "react-bootstrap"
  
 //Components
 import Hero from "../Components/Hero"
-import JobElement from "../Components/JobElement"
 
 import styles from "../styles/Job.module.css"
 
