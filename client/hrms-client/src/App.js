@@ -11,6 +11,12 @@ import Home from "./pages/Home"
 import Jobs from "./pages/Jobs"
 import Job from "./pages/Job"
 import Panel from "./pages/Admin/Panel"
+import JobSeeker from "./pages/JobSeeker/JobSeeker"
+import Employer from "./pages/Employer/Employer"
+import JobSeekerLogin from "./pages/JobSeeker/JobSeekerLogin"
+import JobSeekerRegister from "./pages/JobSeeker/JobSeekerRegister"
+import EmployerLogin from "./pages/Employer/EmployerLogin"
+import EmployerRegister from "./pages/Employer/EmployerRegister"
 
 
 const App = ()=> {
@@ -37,11 +43,11 @@ const App = ()=> {
             </Route>
 
             <Route path="/aday/giris" exact>
-
+              <JobSeekerLogin/>
             </Route>
 
             <Route path="/aday/uyeol">
-
+              <JobSeekerRegister/>
             </Route>
 
             <Route path="/aday/ayarlar">
@@ -49,15 +55,15 @@ const App = ()=> {
             </Route>
 
             <Route path="/aday/:id">
-
+              <JobSeeker/>
             </Route>
 
             <Route path="/firma/giris">
-
+              <EmployerLogin/>
             </Route>
 
             <Route path="/firma/uyeol">
-
+              <EmployerRegister/>
             </Route>
 
             <Route path="/firma/ayarlar">
@@ -65,7 +71,7 @@ const App = ()=> {
             </Route>
 
             <Route path="/firma/:id">
-
+              <Employer/>
             </Route>
 
             <Route path="/:id">
