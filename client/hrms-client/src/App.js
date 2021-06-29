@@ -26,7 +26,7 @@ const App = ()=> {
   return (
     <Switch>
 
-      <Route path="/panel">
+      <Route path="/panel/">
         <Panel/>
       </Route>
 
