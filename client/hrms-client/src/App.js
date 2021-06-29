@@ -17,6 +17,9 @@ import JobSeekerLogin from "./pages/JobSeeker/JobSeekerLogin"
 import JobSeekerRegister from "./pages/JobSeeker/JobSeekerRegister"
 import EmployerLogin from "./pages/Employer/EmployerLogin"
 import EmployerRegister from "./pages/Employer/EmployerRegister"
+import JobSeekerSettings from "./pages/JobSeeker/JobSeekerSettings"
+import EmployerSettings from "./pages/Employer/EmployerSettings"
+import JobAdvert from "./pages/Employer/JobAdvert"
 
 
 const App = ()=> {
@@ -51,7 +54,7 @@ const App = ()=> {
             </Route>
 
             <Route path="/aday/ayarlar">
-
+              <JobSeekerSettings/>
             </Route>
 
             <Route path="/aday/:id">
@@ -67,7 +70,11 @@ const App = ()=> {
             </Route>
 
             <Route path="/firma/ayarlar">
+              <EmployerSettings/>
+            </Route>
 
+            <Route path="/firma/ilanlarım">
+              <JobAdvert/>
             </Route>
 
             <Route path="/firma/:id">
