@@ -25,6 +25,11 @@ public class JobAdvertController {
         return this.jobAdvertService.getall();
     }
 
+    @GetMapping("/getById")
+    public Result getById(@RequestParam int id){
+        return this.jobAdvertService.getById(id);
+    }
+
     @PostMapping("/add")
     public Result add(@RequestBody JobAdvertDto jobAdvert){
         return this.jobAdvertService.add(jobAdvert);

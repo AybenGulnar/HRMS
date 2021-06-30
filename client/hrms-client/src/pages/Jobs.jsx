@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect,useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -13,6 +13,9 @@ import { Container,Row,Col } from "react-bootstrap"
 
 import styles from "../styles/Jobs.module.css"
 
+//Services
+import JobAdvertService from "../services/JobAdvertService"
+import CityService from "../services/CityService"
 
 const useStyles = makeStyles((theme) => ({
       formControl: {
@@ -23,9 +26,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Jobs = ()=>{
-
       const classes = useStyles();
-      const [filter, setFilter] = React.useState({name:"",city:"",type:""});
+
+      const [data,setData] = useState([])
+      const [cities,setCities] = useState([])
+      
+      const [filter, setFilter] = useState({name:"",city:"",type:""});
+      const [filteredData, setfilteredData] = useState([]);
+      
+      useEffect(()=>{
+            const init = async ()=>{
+                  const resCity = await CityService.getAll()
+
+                  var resData = await JobAdvertService.getByActived(true)
+
+                  setCities(resCity.data)
+                  setData(resData.data)
+                  setfilteredData(resData.data)
+
+            }
+            init()
+      },[])
 
       const handleChange = (e) => {
             const {name,value} = e.target
@@ -42,19 +63,33 @@ const Jobs = ()=>{
             })
       };
 
+
+
       const Filter = ()=>{
-            console.log(filter)
+            var temp = [...data]
+            
+
+            temp = temp.filter(item => item.job.title.toLowerCase().includes(filter.name.toLowerCase()))
+            temp = temp.filter(item => item.city.name.toLowerCase().includes(filter.city.toLowerCase()))
+            if(filter.type !== ""){
+                  const isFulltime = filter.type === "Tam Zamanlı" ? true : false;
+                  console.log(isFulltime)
+                  temp = temp.filter(item => item.fullTime === isFulltime)
+            }
+            
+
+            setfilteredData(temp)
       }
 
 
       return(
             <div>
-                 <Hero text="57523+ İş ilanı"/>
+                 <Hero text={data.length+" İş İlanı"}/>
                  <div className={styles.jobs}>
                        <Container>
                               <Row>
                                     <Col lg={3} className={styles.filter}>
-                                          <h3>Filter</h3>
+                                          <h3>Filtre</h3>
                                           <TextField label="İş Bul" name="name" className="mb-3 w-100" variant="outlined" onChange={handleChange} value={filter.name} />
                                           <FormControl variant="outlined" className={classes.formControl + " mb-3"}>
                                                 <InputLabel id="sehir">Şehir</InputLabel>
@@ -67,9 +102,9 @@ const Jobs = ()=>{
                                                 label="Şehir"
                                                 >
                                                 <option aria-label="None" value="" />
-                                                <option>Trabzon</option>
-                                                <option>İstanbul</option>
-                                                <option>İzmir</option>
+                                                {cities.map(item=>(
+                                                      <option key={item.cityId}>{item.name}</option>
+                                                ))}
                                                 </Select>
                                           </FormControl>
                                           <FormControl variant="outlined" className={classes.formControl +" mb-3"}>
@@ -93,14 +128,14 @@ const Jobs = ()=>{
                                     <div className={styles.job_list_text}>
                                           <div className="row align-items-center">
                                                 <div className="col-md-6">
-                                                      <h4>Job Listing</h4>
+                                                      <h4>İş İlanları</h4>
                                                 </div>
                                           </div>
                                     </div>
                                     <div className={styles.job_list}>
-                                          {[1,2,3].map(item=>{
-                                                return(<JobElement/>)
-                                          })}
+                                          {filteredData.length ? filteredData.map(item=>{
+                                                return(<JobElement key={item.jobAdvertId} name={item.job.title} city={item.city.name} type={item.fullTime} date={item.deadline} id={item.jobAdvertId}/>)
+                                          }):<h4 className="text-center">İş İlanı Bulunamadı</h4>}
                                           
                                     </div>
                                     </Col>

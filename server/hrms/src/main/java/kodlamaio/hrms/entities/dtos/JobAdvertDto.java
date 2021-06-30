@@ -19,5 +19,7 @@ public class JobAdvertDto {
     private int salaryMax;
     private int openPositionCount;
     private Date deadline;
+    private boolean isFullTime;
+    private boolean isRemote;
     private boolean isActived;
 }

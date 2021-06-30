@@ -1,5 +1,6 @@
 package kodlamaio.hrms.api.controllers;
 
+import kodlamaio.hrms.entities.concretes.*;
 import kodlamaio.hrms.entities.dtos.UserLoginDto;
 import org.springframework.http.ResponseEntity;
 import kodlamaio.hrms.core.services.CloudinaryService;
@@ -13,9 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
 import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.entities.concretes.Experience;
-import kodlamaio.hrms.entities.concretes.JobSeeker;
-import kodlamaio.hrms.entities.concretes.School;
 import kodlamaio.hrms.entities.dtos.EmailDto;
 import kodlamaio.hrms.entities.dtos.JobSeekerRegisterDto;
 import org.springframework.validation.FieldError;
@@ -52,6 +50,11 @@ public class JobSeekerController {
         return this.jobSeekerService.getall();
     }
 
+    @GetMapping("/getById")
+    public Result getbyId(@RequestParam int id){
+        return this.jobSeekerService.getById(id);
+    }
+
     @PostMapping("/register")
     public Result register(@RequestBody JobSeekerRegisterDto jobSeekerRegisterDto){
         return this.jobSeekerService.register(jobSeekerRegisterDto);
@@ -80,6 +83,16 @@ public class JobSeekerController {
     @GetMapping("/getExperiencesByUserId")
     public List<Experience> getExperiencesByUserId(@RequestParam int id){
         return this.jobSeekerService.getExperiencesByUserId(id);
+    }
+
+    @GetMapping("/getForeignLanguagesByUserId")
+    public List<ForeignLanguage> getForeignLanguagesByUserId(@RequestParam int id){
+        return this.jobSeekerService.getForeignLanguagesByUserId(id);
+    }
+
+    @GetMapping("/getSkillsByUserId")
+    public List<Skill> getSkillsByUserId(@RequestParam int id){
+        return this.jobSeekerService.getSkillsByUserId(id);
     }
 
     @PostMapping("/uploadImage")

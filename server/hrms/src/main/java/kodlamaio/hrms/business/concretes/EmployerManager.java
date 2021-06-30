@@ -13,7 +13,9 @@ import kodlamaio.hrms.entities.dtos.EmployerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class EmployerManager implements EmployerService {
@@ -34,6 +36,18 @@ public class EmployerManager implements EmployerService {
     @Override
     public List<Employer> getall() {
         return this.employerDao.findAll();
+    }
+
+    @Override
+    public Result getById(int id) {
+        Employer employer = new Employer();
+        employer = this.employerDao.getById(id);
+
+        if(!Objects.isNull(employer)){
+            return new SuccessDataResult<Employer>(employer);
+        }
+
+        return new ErrorResult("Kullanıcı Bulunamadı");
     }
 
     @Override

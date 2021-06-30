@@ -1,5 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 
+import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import org.springframework.data.domain.Sort;
 import kodlamaio.hrms.business.abstracts.JobAdvertService;
 import kodlamaio.hrms.core.utilities.results.Result;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class JobAdvertManager implements JobAdvertService {
@@ -30,6 +32,17 @@ public class JobAdvertManager implements JobAdvertService {
     @Override
     public Result getall() {
         return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.findAll(),"Basarili");
+    }
+
+    @Override
+    public Result getById(int id) {
+        JobAdvert jobAdvert = new JobAdvert();
+        jobAdvert = this.jobAdvertDao.getByJobAdvertId(id);
+        if(!Objects.isNull(jobAdvert)){
+            return new SuccessDataResult<JobAdvert>(jobAdvert);
+        }
+
+        return new ErrorResult("İlan Bulunamadı");
     }
 
     @Override
@@ -49,6 +62,8 @@ public class JobAdvertManager implements JobAdvertService {
         job.setJobId(jobAdvertDto.getJobId());
         jobAdvert.setJob(job);
 
+        jobAdvert.setFullTime(jobAdvertDto.isFullTime());
+        jobAdvert.setRemote(jobAdvertDto.isRemote());
         jobAdvert.setActived(jobAdvertDto.isActived());
         jobAdvert.setDeadline(jobAdvertDto.getDeadline());
         jobAdvert.setDescription(jobAdvertDto.getDescription());

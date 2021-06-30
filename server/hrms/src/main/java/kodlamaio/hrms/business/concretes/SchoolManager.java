@@ -8,6 +8,8 @@ import kodlamaio.hrms.entities.concretes.School;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SchoolManager implements SchoolService {
 
@@ -24,5 +26,10 @@ public class SchoolManager implements SchoolService {
         this.schoolDao.save(school);
 
         return new SuccessDataResult<School>(school,"Basarili");
+    }
+
+    @Override
+    public Result getByJobSeeker_id(int id) {
+        return new SuccessDataResult<List<School>>(this.schoolDao.getByJobSeeker_id(id),"Basarili");
     }
 }

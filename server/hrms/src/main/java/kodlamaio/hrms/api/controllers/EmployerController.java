@@ -30,6 +30,11 @@ public class EmployerController {
         return  this.employerService.getall();
     }
 
+    @GetMapping("/getById")
+    public Result getById(@RequestParam int id){
+        return  this.employerService.getById(id);
+    }
+
     @PostMapping("/register")
     public Result register(@RequestBody EmployerDto employerDto){
         return this.employerService.register(employerDto);

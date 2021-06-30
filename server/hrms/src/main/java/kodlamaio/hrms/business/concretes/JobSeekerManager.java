@@ -7,18 +7,13 @@ import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobSeekerDao;
-import kodlamaio.hrms.entities.concretes.Experience;
-import kodlamaio.hrms.entities.concretes.JobSeeker;
-import kodlamaio.hrms.entities.concretes.School;
+import kodlamaio.hrms.entities.concretes.*;
 import kodlamaio.hrms.entities.dtos.EmailDto;
 import kodlamaio.hrms.entities.dtos.JobSeekerRegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JobSeekerManager implements JobSeekerService {
@@ -38,6 +33,18 @@ public class JobSeekerManager implements JobSeekerService {
     @Override
     public List<JobSeeker> getall() {
         return this.jobSeekerDao.findAll();
+    }
+
+    @Override
+    public Result getById(int id) {
+        JobSeeker jobSeeker = new JobSeeker();
+        jobSeeker = this.jobSeekerDao.getById(id);
+
+        if(!Objects.isNull(jobSeeker)){
+            return new SuccessDataResult<JobSeeker>(jobSeeker);
+        }
+
+        return new ErrorResult("Kullanıcı Bulunamadı");
     }
 
     @Override
@@ -194,6 +201,20 @@ public class JobSeekerManager implements JobSeekerService {
         }
 
         return experiences;
+    }
+
+    @Override
+    public List<ForeignLanguage> getForeignLanguagesByUserId(int id) {
+        JobSeeker jobSeeker = jobSeekerDao.getById(id);
+
+        return jobSeeker.getForeignLanguages();
+    }
+
+    @Override
+    public List<Skill> getSkillsByUserId(int id) {
+        JobSeeker jobSeeker = jobSeekerDao.getById(id);
+
+        return jobSeeker.getSkills();
     }
 
 }
