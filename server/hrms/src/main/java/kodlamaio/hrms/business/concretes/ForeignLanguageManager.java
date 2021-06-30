@@ -8,6 +8,8 @@ import kodlamaio.hrms.entities.concretes.ForeignLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ForeignLanguageManager implements ForeignLanguageService {
 
@@ -17,6 +19,11 @@ public class ForeignLanguageManager implements ForeignLanguageService {
     public ForeignLanguageManager(ForeignLanguageDao foreignLanguageDao) {
         super();
         this.foreignLanguageDao = foreignLanguageDao;
+    }
+
+    @Override
+    public Result getAll() {
+        return new SuccessDataResult<List<ForeignLanguage>>(this.foreignLanguageDao.findAll());
     }
 
     @Override

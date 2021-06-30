@@ -9,14 +9,20 @@ const getAll = async ()=>{
       return res.data
 }
 
+const getById = async(id) =>{
+      const res = await axios.get(url+"getById?id="+id)
+
+      return res.data
+}
+
 const getByActiveAndEmployer = async (active,id)=>{
-      const res = await axios.get(url+"getbyactiveandemployer",{active,id})
+      const res = await axios.get(url+"getbyactiveandemployer?active="+active+"&id="+id)
 
       return res.data
 }
 
 const getByActived = async (active)=>{
-      const res = await axios.get(url+"getbyactived",active)
+      const res = await axios.get(url+"getbyactived?active="+active)
 
       return res.data
 }
@@ -34,6 +40,6 @@ const add = async (job_advert)=>{
 }
 
 
-const service = {getAll,getByActiveAndEmployer,getByActived,getByDate,add}
+const service = {getAll,getById,getByActiveAndEmployer,getByActived,getByDate,add}
 
 export default service

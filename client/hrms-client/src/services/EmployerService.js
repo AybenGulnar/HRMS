@@ -9,6 +9,12 @@ const getAll = async ()=>{
       return res.data
 }
 
+const getById = async (id)=>{
+      const res = await axios.get(url+"getById?id="+id)
+
+      return res.data
+}
+
 const register = async (employer)=>{
       const res = await axios.post(url+"register",employer)
 
@@ -21,6 +27,6 @@ const login = async (email,password)=>{
       return res.data
 }
 
-const service = {getAll,login,register}
+const service = {getAll,login,register,getById}
 
 export default service

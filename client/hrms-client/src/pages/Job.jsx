@@ -1,4 +1,6 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useState } from "react"
+import {useRouteMatch} from "react-router-dom"
 
 import {Container,Row,Col} from "react-bootstrap"
  
@@ -7,10 +9,61 @@ import Hero from "../Components/Hero"
 
 import styles from "../styles/Job.module.css"
 
+//service
+import JobAdvertService from "../services/JobAdvertService"
+
 const Job = ()=>{
+
+      const match = useRouteMatch("/is-ilanlari/:id")
+
+      const [data,setData] = useState({
+            "jobAdvertId": 0,
+            job: {
+                  title: ""
+            },
+            description: "",
+            city: {
+                  name: ""
+            },
+            salaryMin: 0,
+            salaryMax: 0,
+            openPositionCount: 0,
+            deadline: "",
+            publishingDate: "",
+            employer: {
+                  companyName: "",
+            },
+            actived: false,
+            fullTime: false,
+            remote: false
+      })
+
+      useEffect(()=>{
+            const id = match.params.id
+            const init = async ()=>{
+                  const res = await JobAdvertService.getById(Number(id))
+                  if(res.success){
+                        setData(res.data)
+                  }
+            }
+            init()
+      },[match.params.id])
+
+      if(!data.actived){
+            return( 
+            <div>
+                  <Hero text="İş İlanı Bulunamadı" />
+                  <div className={styles.job}>
+                        <Container className="py-5">
+                              <h1 className="text-center">İş İlanı Bulunamadı</h1>
+                        </Container>
+                        
+                  </div>
+            </div>)
+      }
       return(
             <div>
-                  <Hero text="Software Engineer"/>
+                  <Hero text={data.job.title}/>
                   <div className={styles.job}>
                         <Container>
                               <Row>
@@ -21,13 +74,13 @@ const Job = ()=>{
                                                       <img src="https://technext.github.io/job-board-2/img/svg_icon/1.svg" alt=""/>
                                                 </div>
                                                 <div className={styles.content + " float-left"} >
-                                                      <a href="/"><h4>Software Engineer</h4></a>
+                                                      <a href="/"><h4>{data.job.title}</h4></a>
                                                       <div className="d-flex align-items-center">
                                                       <div className="mr-5">
-                                                            <p><i className="fa fa-map-marker mr-1"></i> California, USA</p>
+                                                            <p><i className="fa fa-map-marker mr-1"></i> {data.city.name}</p>
                                                       </div>
                                                       <div className="mr-5">
-                                                            <p><i className="fa fa-clock-o mr-1"></i> Part-time</p>
+                                                            <p><i className="fa fa-clock-o mr-1"></i> {data.fullTime ? "Tam Zamanlı":"Yarı Zamanlı"}</p>
                                                       </div>
                                                       </div>
                                                 </div>
@@ -41,23 +94,23 @@ const Job = ()=>{
                                     <div className={styles.desc}>
                                           <div>
                                                 <h4>İlan Açıklama</h4>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing.</p>
-                                                <p>Variations of passages of lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing.</p>
+                                                <p>{data.description}</p>
                                           </div>
                                     </div>
                                     </Col>
                                     <Col lg={4}>
                                           <div className={styles.job_sumary}>
                                                 <div>
-                                                      <h3>Job Summery</h3>
+                                                      <h3>İş Özellikleri</h3>
                                                 </div>
                                                 <div>
                                                       <ul>
-                                                            <li>Published on: <span>12 Nov, 2019</span></li>
-                                                            <li>Vacancy: <span>2 Position</span></li>
-                                                            <li>Salary: <span>50k - 120k/y</span></li>
-                                                            <li>Location: <span>California, USA</span></li>
-                                                            <li>Job Nature: <span> Full-time</span></li>
+                                                            <li>Açık Pozisyon Sayısı: <span>{data.openPositionCount}</span></li>
+                                                            <li>Maaş Aralığı: <span>{data.salaryMin} {data.salaryMax}</span></li>
+                                                            <li>Yayınlanma Tarihi: <span>{new Date(data.publishingDate).toDateString()}</span></li>
+                                                            <li>İlan Bitiş Tarihi: <span>{new Date(data.deadline).toDateString()}</span></li>
+                                                            <li>Remote: <span>{data.remote ? "Evet": "Hayır"}</span></li>
+                                                            <li>Şirket İsmi: <span> {data.employer.companyName}</span></li>
                                                       </ul>
                                                 </div>
                                                 <button className={styles.btn}>Başvur</button>

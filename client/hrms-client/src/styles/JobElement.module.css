@@ -9,6 +9,11 @@
       -webkit-border-radius: 5px;
       -moz-border-radius: 5px;
       border-radius: 5px; 
+      cursor: pointer;
+}
+
+.job_element:hover{
+      background-color: rgba(0, 0, 0, 0.144);
 }
 
 .job_element a{
@@ -64,6 +69,7 @@
       display: inline-block;
       background: #EFFDF5;
       margin-right: 15px;
+      border: none;
 }
 
 .heart_mark:hover{

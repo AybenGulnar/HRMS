@@ -15,15 +15,11 @@
       -webkit-border-radius: 5px;
       -moz-border-radius: 5px;
       border-radius: 5px; 
+      cursor: pointer;
 }
 
-.Employer_element a{
-      color: #1F1F1F;
-      outline: medium none;
-}
-
-.Employer_element a:hover{
-      text-decoration: none;
+.Employer_element:hover{
+      background-color: rgba(0, 0, 0, 0.144);
 }
 
 .Employer_element h4{

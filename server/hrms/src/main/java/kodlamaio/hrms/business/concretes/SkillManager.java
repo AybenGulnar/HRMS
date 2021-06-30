@@ -8,6 +8,8 @@ import kodlamaio.hrms.entities.concretes.Skill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SkillManager implements SkillService {
 
@@ -17,6 +19,11 @@ public class SkillManager implements SkillService {
     public SkillManager(SkillDao skillDao) {
         super();
         this.skillDao = skillDao;
+    }
+
+    @Override
+    public Result getAll() {
+        return new SuccessDataResult<List<Skill>>(this.skillDao.findAll(),"Basarili");
     }
 
     @Override

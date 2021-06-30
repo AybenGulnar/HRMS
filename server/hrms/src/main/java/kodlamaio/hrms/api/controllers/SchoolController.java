@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RestController
 @RequestMapping("/api/schools")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SchoolController {
 
     private SchoolService schoolService;
@@ -19,6 +20,11 @@ public class SchoolController {
     public SchoolController(SchoolService schoolService){
         super();
         this.schoolService = schoolService;
+    }
+
+    @GetMapping("/getByJobSeeker")
+    public Result getByJobSeeker(@RequestParam int id){
+        return this.schoolService.getByJobSeeker_id(id);
     }
 
 

@@ -8,6 +8,8 @@ import kodlamaio.hrms.entities.concretes.Experience;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExperienceManager implements ExperienceService {
 
@@ -24,5 +26,10 @@ public class ExperienceManager implements ExperienceService {
         this.experienceDao.save(experience);
 
         return new SuccessDataResult<Experience>(experience,"Basarili");
+    }
+
+    @Override
+    public Result getByJobSeeker_id(int id) {
+        return new SuccessDataResult<List<Experience>>(this.experienceDao.getByJobSeeker_id(id),"Basarili");
     }
 }

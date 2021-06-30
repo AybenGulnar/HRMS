@@ -9,6 +9,12 @@ const getAll = async ()=>{
       return res.data
 }
 
+const getById = async (id)=>{
+      const res = await axios.get(url+"getById?id="+id)
+
+      return res.data
+}
+
 const register = async (job_seeker)=>{
       const res = await axios.post(url+"register")
 
@@ -22,13 +28,25 @@ const login = async (email,password)=>{
 }
 
 const getExperiencesByUserId = async (id)=>{
-      const res = await axios.get(url+"getexperiencesbyuserid",{id})
+      const res = await axios.get(url+"getExperiencesByUserId?id="+id)
 
       return res.data
 }
 
 const getSchoolsByUserId = async (id) =>{
-      const res = await axios.get(url+"getschoolsbyuserid",{id})
+      const res = await axios.get(url+"getSchoolsByUserId?id="+id)
+
+      return res.data
+}
+
+const getForeignLanguagesByUserId = async (id)=>{
+      const res = await axios.get(url+"getForeignLanguagesByUserId?id="+id)
+
+      return res.data
+}
+
+const getSkillsByUserId = async (id)=>{
+      const res = await axios.get(url+"getSkillsByUserId?id="+id)
 
       return res.data
 }
@@ -39,7 +57,7 @@ const uploadImage = async (id,imgFile)=>{
       return res.data
 }
 
-const service = {getAll,register,login,getExperiencesByUserId,getSchoolsByUserId,uploadImage}
+const service = {getAll,getById,register,login,getExperiencesByUserId,getSchoolsByUserId,getForeignLanguagesByUserId,getSkillsByUserId,uploadImage}
 
 
 export default service

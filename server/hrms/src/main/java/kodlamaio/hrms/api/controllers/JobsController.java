@@ -13,6 +13,7 @@ import kodlamaio.hrms.entities.concretes.Job;
 @ResponseBody
 @RestController
 @RequestMapping("/api/jobs")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JobsController {
 	
 	private JobService jobService;

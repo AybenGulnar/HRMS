@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface EmployerService {
     List<Employer> getall();
+    Result getById(int id);
     Result register(EmployerDto employerDto);
     Result MailConfirm(EmailDto emailDto);
     Result login(String eposta,String password);
