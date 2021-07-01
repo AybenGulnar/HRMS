@@ -70,6 +70,7 @@
       display: inline-block;
       background: #EFFDF5;
       margin-right: 15px;
+      border: none;
 }
 
 .heart_mark:hover{

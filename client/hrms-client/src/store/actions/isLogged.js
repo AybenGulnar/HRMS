@@ -1,7 +1,9 @@
-const sigin = (isEmployer)=>{
+const sigin = (isEmployer,id,name)=>{
       return{
         type:'SIGN_IN',
-        isEmployer:isEmployer
+        isEmployer:isEmployer,
+        id:id,
+        name:name
       }
 }
     

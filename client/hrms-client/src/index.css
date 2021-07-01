@@ -69,3 +69,33 @@ code {
   background: transparent;
 }
 
+.hover-bg-dark:hover{
+  background-color: rgba(0, 0, 0, 0.138)!important;
+}
+
+/* Favotire */
+
+.fav-item{
+  padding: 5px 15px;
+}
+
+.fav-item span{
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fav-item span:hover{
+  opacity: 0.7;
+}
+
+.fav-item i{
+  color: red!important;
+  margin-left:5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.fav-item i:hover{
+  opacity: 0.7;
+}

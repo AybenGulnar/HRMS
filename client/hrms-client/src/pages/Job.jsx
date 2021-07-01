@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useState } from "react"
 import {useRouteMatch} from "react-router-dom"
+import {useSelector,useDispatch} from "react-redux"
 
 import {Container,Row,Col} from "react-bootstrap"
  
@@ -12,12 +13,32 @@ import styles from "../styles/Job.module.css"
 //service
 import JobAdvertService from "../services/JobAdvertService"
 
+//Actions
+import FavAction from "../store/actions/Fav"
+
 const Job = ()=>{
 
       const match = useRouteMatch("/is-ilanlari/:id")
+      const dispatch = useDispatch()
+
+      const Favs = useSelector(state=> state.favReducer)
+      const isLogged = useSelector(state=> state.loggedReducer)
+
+      const toggleFav = ()=>{
+            if(isLogged.isLogged){
+                  const temp = Favs.find(item=>item.id == data.jobAdvertId)
+                  console.log(temp)
+                  if(!temp){
+                        dispatch(FavAction.ADD(data.jobAdvertId,data.job.title))
+                  }
+                  else{
+                        dispatch(FavAction.DEL(data.jobAdvertId))
+                  }
+            }
+      }
 
       const [data,setData] = useState({
-            "jobAdvertId": 0,
+            jobAdvertId: 0,
             job: {
                   title: ""
             },
@@ -87,7 +108,7 @@ const Job = ()=>{
                                           </div>
                                           <div className={styles.right}>
                                                 <div>
-                                                      <a className={styles.heart_mark} href="/"> <i className="far fa-heart"></i> </a>
+                                                      <button className={styles.heart_mark} style={Favs.find(item=>item.id == data.jobAdvertId) ? {backgroundColor:"#00D363"}:{}} onClick={toggleFav}> <i className="far fa-heart" style={Favs.find(item=>item.id == data.jobAdvertId) ? {color:"white"}:{}}></i> </button>
                                                 </div>
                                           </div>
                                     </div>
@@ -113,7 +134,7 @@ const Job = ()=>{
                                                             <li>Şirket İsmi: <span> {data.employer.companyName}</span></li>
                                                       </ul>
                                                 </div>
-                                                <button className={styles.btn}>Başvur</button>
+                                                <button className={styles.btn} onClick={toggleFav}>Başvur</button>
                                           </div>
                                     </Col>
                               </Row>

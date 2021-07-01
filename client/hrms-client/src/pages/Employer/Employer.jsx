@@ -39,7 +39,6 @@ const JobSeeker = () => {
                   const res = await EmployerService.getById(Number(id))
                   if(res.success){
                         const jobA = await JobAdvertService.getByActiveAndEmployer(true,id)
-                        console.log(jobA)
                         setData(res.data)
                         setJobAdverts(jobA.data)
                   }
@@ -87,7 +86,7 @@ const JobSeeker = () => {
                                                 <h4>İlanlar</h4>
                                                 <div>
                                                       {jobAdverts.map(item=>(
-                                                            <div className={styles.Employer_element + " d-flex justify-content-between"} onClick={()=>history.push("/is-ilanlari/"+item.jobAdvertId)}>
+                                                            <div key={item.jobAdvertId} className={styles.Employer_element + " d-flex justify-content-between"} onClick={()=>history.push("/is-ilanlari/"+item.jobAdvertId)}>
                                                                   <div>
                                                                         <div className={styles.thumb}>
                                                                               <img src="https://technext.github.io/job-board-2/img/svg_icon/1.svg" alt="" />

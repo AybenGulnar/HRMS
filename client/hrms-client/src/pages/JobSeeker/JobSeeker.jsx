@@ -99,7 +99,7 @@ const JobSeeker = () => {
                                                       <h5>Tecrübeler</h5>
                                                       <ul>
                                                             {experiences.map(item=>(
-                                                                  <li>{item.companyName} {item.position} {item.startYear}-{item.leaveYear}</li>
+                                                                  <li key={item.id}>{item.companyName} {item.position} {item.startYear}-{item.leaveYear}</li>
                                                             ))}
                                                       </ul>
                                                 </div>
@@ -107,7 +107,7 @@ const JobSeeker = () => {
                                                       <h5>Yabancı Diller</h5>
                                                       <ul>
                                                             {foreignLanguages.map(item=>(
-                                                                  <li>{item.name} Seviye:{item.level}</li>
+                                                                  <li key={item.id}>{item.name} Seviye:{item.level}</li>
                                                             ))}
                                                       </ul>
                                                 </div>
@@ -115,7 +115,7 @@ const JobSeeker = () => {
                                                       <h5>Beceriler</h5>
                                                       <ul>
                                                             {skills.map(item=>(
-                                                                  <li>{item.name}</li>
+                                                                  <li key={item.id}>{item.name}</li>
                                                             ))}
                                                       </ul>
                                                 </div>
