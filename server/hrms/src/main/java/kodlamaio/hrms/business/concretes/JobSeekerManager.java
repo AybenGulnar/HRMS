@@ -82,7 +82,7 @@ public class JobSeekerManager implements JobSeekerService {
         JobSeeker jobSeeker = new JobSeeker();
         jobSeeker = this.jobSeekerDao.getByePosta(eposta);
 
-        if(!jobSeeker.getEPosta().isEmpty()){
+        if(!Objects.isNull(jobSeeker)){
             if(password.equals(jobSeeker.getPassword())){
                 return new SuccessDataResult<JobSeeker>(jobSeeker,"Girş Başarılı");
             }

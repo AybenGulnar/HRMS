@@ -87,7 +87,7 @@ public class EmployerManager implements EmployerService {
         Employer employer = new Employer();
         employer = this.employerDao.getByePosta(eposta);
 
-        if(!employer.getEPosta().isEmpty()){
+        if(!Objects.isNull(employer)){
             if(password.equals(employer.getPassword())){
                 return new SuccessDataResult<Employer>(employer,"Girş Başarılı");
             }

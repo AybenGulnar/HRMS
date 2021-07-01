@@ -22,7 +22,7 @@ const register = async (job_seeker)=>{
 }
 
 const login = async (email,password)=>{
-      const res = await axios.post(url+"login",{email,password})
+      const res = await axios.post(url+"login",{email:email,password:password})
 
       return res.data
 }

@@ -1,14 +1,43 @@
 import React from "react"
 import { useHistory } from "react-router"
+import {useSelector,useDispatch} from "react-redux"
+
+//Actions
+import FavAction from "../store/actions/Fav"
+
 
 import styles from "../styles/JobElement.module.css"
 
 const JobElement = ({name,imgUrl,city,type,date,id})=>{
 
       const history = useHistory()
+      const dispatch = useDispatch()
 
-      return(<div className={styles.job_element + " d-flex justify-content-between"} onClick={()=>history.push("/is-ilanlari/"+id)}>
-            <div className="d-flex align-items-center">
+      const Favs = useSelector(state=> state.favReducer)
+      const isLogged = useSelector(state=> state.loggedReducer)
+
+      const toggleFav = ()=>{
+            if(isLogged.isLogged){
+                  const temp = Favs.find(item=>item.id == id)
+                  console.log(temp)
+                  if(!temp){
+                        dispatch(FavAction.ADD(id,name))
+                  }
+                  else{
+                        dispatch(FavAction.DEL(id))
+                  }
+            }
+      }
+
+      const goAdvert=(e)=>{
+            if(e.target.name !== "fav"){
+                  history.push("/is-ilanlari/"+id)
+            }
+            
+      }
+
+      return(<div className={styles.job_element + " d-flex justify-content-between"}>
+            <div className="d-flex align-items-center" onClick={goAdvert}>
                   <div className={styles.thumb}>
                         <img src="https://technext.github.io/job-board-2/img/svg_icon/1.svg" alt=""/>
                   </div>
@@ -26,8 +55,8 @@ const JobElement = ({name,imgUrl,city,type,date,id})=>{
             </div>
             <div className={styles.right}>
                   <div>
-                        <button className={styles.heart_mark} href="/"> <i className="fa fa-heart"></i> </button>
-                        <button className={styles.apply_btn}>Başvur</button>
+                        <button className={styles.heart_mark} onClick={toggleFav} name="fav" style={Favs.find(item=>item.id == id) ? {backgroundColor:"#00D363"}:{}} href="/"> <span name="fav"><i className="fa fa-heart" style={Favs.find(item=>item.id == id) ? {color:"white"}:{}}></i></span> </button>
+                        <button className={styles.apply_btn} name="fav" onClick={toggleFav}>Başvur</button>
                   </div>
                   <div className="date">
                         <p>{new Date(date).toDateString()}</p>

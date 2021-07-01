@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,8 +11,17 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {useSelector,useDispatch} from "react-redux"
+import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
+import AuthAction from "../../store/actions/isLogged"
+
+//Componets
 import Hero from "../../Components/Hero"
+
+//Service
+import EmployerService from "../../services/EmployerService"
 
 const useStyles = makeStyles((theme) => ({
       paper: {
@@ -38,6 +47,50 @@ const useStyles = makeStyles((theme) => ({
 const EmployerLogin = () => {
       const classes = useStyles();
 
+      const dispatch = useDispatch()
+      const history = useHistory()
+
+      const isLogged = useSelector(state=> state.loggedReducer)
+
+      const [user,setUser] = useState({email:"",pass:"",remember:false})
+
+      useEffect(()=>{
+            if(isLogged.isLogged){
+                  history.push("/")
+            }
+      },[])
+
+      const handleChange = (e)=>{
+
+            const {name,value,checked} = e.target
+
+            setUser(prevValue=>{
+                  if(name==="email"){
+                        return({...prevValue,email:value})
+                  }
+                  else if(name==="pass"){
+                        return({...prevValue,pass:value})
+                  }
+                  else if(name==="remember"){
+                        return({...prevValue,remember:checked})
+                  }
+            })
+      }
+
+
+      const login = async(e)=>{
+            e.preventDefault()
+            const res = await EmployerService.login(user.email,user.pass)
+            if(res.success){
+                  dispatch(AuthAction.sigin(true,res.data.id,(res.data.firstName + " " +res.data.lastName)))
+                  history.push("/")
+                  
+            }else{
+                  toast.error(res.message)
+            }
+            
+      }
+
       return (
             <div>
                   <Hero text="İş Veren Giriş" />
@@ -48,34 +101,38 @@ const EmployerLogin = () => {
                                     <LockOutlinedIcon />
                               </Avatar>
                               <Typography component="h1" variant="h5">
-                                    Sign in
+                                    Giriş Yap
                               </Typography>
-                              <form className={classes.form} noValidate>
+                              <form className={classes.form} onSubmit={login}>
                                     <TextField
                                           variant="outlined"
                                           margin="normal"
                                           required
                                           fullWidth
                                           id="email"
-                                          label="Email Address"
+                                          label="Eposta"
                                           name="email"
+                                          value={user.email}
                                           autoComplete="email"
                                           autoFocus
+                                          onChange={handleChange}
                                     />
                                     <TextField
                                           variant="outlined"
                                           margin="normal"
                                           required
                                           fullWidth
-                                          name="password"
-                                          label="Password"
+                                          name="pass"
+                                          label="Şifre"
                                           type="password"
                                           id="password"
                                           autoComplete="current-password"
+                                          value={user.pass}
+                                          onChange={handleChange}
                                     />
                                     <FormControlLabel
-                                          control={<Checkbox value="remember" color="primary" />}
-                                          label="Remember me"
+                                          control={<Checkbox value={user.remember} name="remember" color="primary" onChange={handleChange} color="primary" />}
+                                          label="Beni Hatırla"
                                     />
                                     <Button
                                           type="submit"
@@ -84,23 +141,24 @@ const EmployerLogin = () => {
                                           color="primary"
                                           className={classes.submit}
                                     >
-                                          Sign In
+                                          Giriş Yap
                                     </Button>
                                     <Grid container>
                                           <Grid item xs>
                                                 <Link href="#" variant="body2">
-                                                      Forgot password?
+                                                Şifremi Unuttum!
                                                 </Link>
                                           </Grid>
                                           <Grid item>
                                                 <Link href="#" variant="body2">
-                                                      {"Don't have an account? Sign Up"}
+                                                      {"Hesabın Yok Mu? Kayıt Ol"}
                                                 </Link>
                                           </Grid>
                                     </Grid>
                               </form>
                         </div>
                   </Container>
+                  <ToastContainer />
             </div>
       )
 }

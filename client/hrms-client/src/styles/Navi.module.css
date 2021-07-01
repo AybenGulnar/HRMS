@@ -13,6 +13,9 @@
 
 .buttons{
       float: right;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 }
 
 .btn{
@@ -75,6 +78,7 @@
       height: 57px;
       position: relative;
       cursor: pointer;
+      display: inline-block;
 }
 
 .photo{
@@ -90,7 +94,6 @@
       width: 100%;
       height: auto;
       min-height: 45px;
-      _height: 45px;
       position: relative;
       top: 0;
 }
@@ -102,7 +105,7 @@
 .name div{
       padding: 0 20px 0 55px;
       font: 14px/45px 'futura-m';
-      color: #fff;
+      color: white;
       display: block;
 }
 
@@ -112,6 +115,36 @@
       text-overflow: ellipsis;
       max-width: 150px;
       display: block;
+}
+
+.fav{
+      height: 57px;
+      position: relative;
+      cursor: pointer;
+      display: block;
+      padding: 0 20px 0 20px;
+      font: 14px/45px 'futura-m';
+      color: #fff;
+}
+
+.fav div{
+      border-radius: 50px;
+      padding: 0 10px 0 10px;
+      background-color: white;
+      color: #00D363;
+      border: 1px solid white;
+}
+
+.fav div:hover{
+      background-color: transparent;
+      color: white;
+}
+
+.fav i{
+      font-size: 25px;
+      position: relative;
+      top: 2px;
+      right: 2px;
 }
 
 @media (max-width: 450px){
