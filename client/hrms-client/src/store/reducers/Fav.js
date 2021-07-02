@@ -1,4 +1,4 @@
-const favReducer = (state=[{id:1,name:"React Dev"}],action)=>{
+const favReducer = (state=[],action)=>{
       switch(action.type){
         case 'ADD':
           return [...state,{id:action.id,name:action.name}]

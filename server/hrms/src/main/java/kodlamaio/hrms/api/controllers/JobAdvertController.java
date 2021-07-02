@@ -35,6 +35,16 @@ public class JobAdvertController {
         return this.jobAdvertService.add(jobAdvert);
     }
 
+    @PostMapping("/deleteById")
+    public Result deleteById(@RequestParam int id){
+        return this.jobAdvertService.deleteById(id);
+    }
+
+    @PostMapping("/changeActive")
+    public Result changeActive(@RequestParam int id,@RequestParam boolean active){
+        return this.jobAdvertService.changeActive(id,active);
+    }
+
     @GetMapping("/getbyactived")
     public Result getByActived(@RequestParam boolean active){
         return this.jobAdvertService.getByActived(active);
@@ -48,5 +58,10 @@ public class JobAdvertController {
     @GetMapping("/getbyactiveandemployer")
     public Result getByActiveAndEmployer(@RequestParam boolean active,@RequestParam int id){
         return this.jobAdvertService.getByActiveAndEmployer(active,id);
+    }
+
+    @GetMapping("/getbyemployer")
+    public Result getByActiveAndEmployer(@RequestParam int id){
+        return this.jobAdvertService.getByEmployer(id);
     }
 }

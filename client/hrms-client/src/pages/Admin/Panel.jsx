@@ -5,6 +5,7 @@ import {Redirect} from "react-router-dom"
 
 //Components
 import Main from '../../Components/Panel/Main';
+import JobAdvertPage from '../../Components/Panel/JobAdvert/JobAdvert';
 
 //Material Ui
 import clsx from 'clsx';
@@ -26,6 +27,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PeopleIcon from '@material-ui/icons/People';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 
 
 const drawerWidth = 240;
@@ -192,6 +194,15 @@ export default function Panel() {
           </List>
           <Divider />
           <List>
+            <Link to="/panel/jobadverts" style={{color:'black'}}>
+                      <ListItem button>
+                            <ListItemIcon><LibraryBooksIcon /></ListItemIcon>
+                            <ListItemText primary={"İş İlanları"} />
+                      </ListItem>
+              </Link>
+          </List>
+          <Divider />
+          <List>
               <Link to="/panel/jobseekers" style={{color:'black'}}>
                     <ListItem button>
                           <ListItemIcon><PeopleIcon /></ListItemIcon>
@@ -228,9 +239,12 @@ export default function Panel() {
 
                     <Route path="/panel/jobseekers">
                           {/* <JobSeekers/> */}
-                    </Route>
+                    </Route>JobAdvertPage
                     <Route path="/panel/employers">
                           {/* <Employers/> */}
+                    </Route>
+                    <Route path="/panel/jobadverts">
+                          <JobAdvertPage/>
                     </Route>
 
               </Switch>

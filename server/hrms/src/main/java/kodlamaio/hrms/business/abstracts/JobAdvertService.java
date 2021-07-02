@@ -10,4 +10,7 @@ public interface JobAdvertService {
     Result getByActived(boolean isActived);
     Result getByDate();
     Result getByActiveAndEmployer(boolean active,int id);
+    Result getByEmployer(int id);
+    Result deleteById(int id);
+    Result changeActive(int id,boolean active);
 }

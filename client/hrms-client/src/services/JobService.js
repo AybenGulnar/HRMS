@@ -3,7 +3,7 @@ import axios from "axios"
 const url = "http://localhost:4000/api/jobs/"
 
 const getAll = async ()=>{
-      const res = await axios.get(url+"add")
+      const res = await axios.get(url+"getall")
 
       return res.data
 }
