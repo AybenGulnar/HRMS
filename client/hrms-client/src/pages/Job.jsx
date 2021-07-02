@@ -127,7 +127,7 @@ const Job = ()=>{
                                                 <div>
                                                       <ul>
                                                             <li>Açık Pozisyon Sayısı: <span>{data.openPositionCount}</span></li>
-                                                            <li>Maaş Aralığı: <span>{data.salaryMin} {data.salaryMax}</span></li>
+                                                            <li>Maaş Aralığı: <span>{data.salaryMin} - {data.salaryMax}</span></li>
                                                             <li>Yayınlanma Tarihi: <span>{new Date(data.publishingDate).toDateString()}</span></li>
                                                             <li>İlan Bitiş Tarihi: <span>{new Date(data.deadline).toDateString()}</span></li>
                                                             <li>Remote: <span>{data.remote ? "Evet": "Hayır"}</span></li>

@@ -1,6 +1,7 @@
 package kodlamaio.hrms.business.concretes;
 
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import org.springframework.data.domain.Sort;
 import kodlamaio.hrms.business.abstracts.JobAdvertService;
 import kodlamaio.hrms.core.utilities.results.Result;
@@ -64,7 +65,7 @@ public class JobAdvertManager implements JobAdvertService {
 
         jobAdvert.setFullTime(jobAdvertDto.isFullTime());
         jobAdvert.setRemote(jobAdvertDto.isRemote());
-        jobAdvert.setActived(jobAdvertDto.isActived());
+        jobAdvert.setActived(false);
         jobAdvert.setDeadline(jobAdvertDto.getDeadline());
         jobAdvert.setDescription(jobAdvertDto.getDescription());
         jobAdvert.setSalaryMax(jobAdvertDto.getSalaryMax());
@@ -94,5 +95,25 @@ public class JobAdvertManager implements JobAdvertService {
     @Override
     public Result getByActiveAndEmployer(boolean active,int id) {
         return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.getByIsActivedAndEmployer_id(active,id),"Basarili");
+    }
+
+    @Override
+    public Result getByEmployer(int id) {
+        return new SuccessDataResult<List<JobAdvert>>(this.jobAdvertDao.getByEmployer_id(id),"Basarili");
+    }
+
+    @Override
+    public Result deleteById(int id) {
+        this.jobAdvertDao.deleteById(id);
+        return new SuccessResult("Basarili");
+    }
+
+    @Override
+    public Result changeActive(int id, boolean active) {
+        JobAdvert jobAdvert = new JobAdvert();
+        jobAdvert = this.jobAdvertDao.getByJobAdvertId(id);
+        jobAdvert.setActived(active);
+        this.jobAdvertDao.save(jobAdvert);
+        return new SuccessDataResult<JobAdvert>(jobAdvert);
     }
 }

@@ -7,6 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
+// Services
+import JobAdvertService from "../../services/JobAdvertService"
 
 const Delete = ({ open, setOpen,jobAdvert,setData }) => {
       const theme = useTheme();
@@ -16,12 +18,18 @@ const Delete = ({ open, setOpen,jobAdvert,setData }) => {
             setOpen(false);
       };
 
-      const Sil= ()=>{
-            setData(prevValue=>{
-                  return(prevValue.filter(item=>item.id !== jobAdvert.id))
-            })
+      const Sil= async ()=>{
+            const res = await JobAdvertService.deleteById(jobAdvert.jobAdvertId)
 
-            setOpen(false)
+            if(res.success){
+                  setData(prevValue=>{
+                        return(prevValue.filter(item=>item.jobAdvertId !== jobAdvert.jobAdvertId))
+                  })
+      
+                  setOpen(false)
+            }
+
+            
       }
 
       return (
@@ -31,7 +39,7 @@ const Delete = ({ open, setOpen,jobAdvert,setData }) => {
                   onClose={handleClose}
                   aria-labelledby="responsive-dialog-title"
             >
-                  <DialogTitle id="responsive-dialog-title">{"Dil Sil"}</DialogTitle>
+                  <DialogTitle id="responsive-dialog-title">{"İş İlanı Sil"}</DialogTitle>
                   <DialogContent>
                         <h3>{jobAdvert.name}</h3>
                   </DialogContent>
