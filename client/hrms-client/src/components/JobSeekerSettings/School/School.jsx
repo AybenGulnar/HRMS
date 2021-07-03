@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +8,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import {useSelector} from "react-redux"
+import { ToastContainer, toast } from 'react-toastify';
+
+//Services
+import JobSeekerService from "../../../services/JobSeekerService"
 
 //Components
 import Add from "./Add"
@@ -22,6 +27,8 @@ const useStyles = makeStyles({
 
 const School = ()=>{
       const classes = useStyles();
+      const isLogged = useSelector(state=> state.loggedReducer)
+
 
       const [add,setAdd] = useState(false)
       const [edit,setEdit] = useState(false)
@@ -29,19 +36,29 @@ const School = ()=>{
 
       const [school,setSchool] = useState({
             id:0,
-            name: '',
-            departmant: '',
-            start_year: '',
-            graduated_year: ''
+            schoolName: '',
+            department: '',
+            startYear: '',
+            graduatedYear: ''
       })
 
-      const [data,setData] = useState([
-            {id:1,name:'Gazi Üniversitesi', departmant:'Bilgisayar Mühendisliği',start_year:1999,graduated_year:2004},
-            {id:2,name:'İstanbul Üniversitesi', departmant:'Makine Mühendisliği',start_year:2004,graduated_year:2008},
-            {id:3,name:'Ankara Üniversitesi', departmant:'İşletme',start_year:2012,graduated_year:2016}
-          ])
+      const [data,setData] = useState([])
+
+      const init = async () => {
+            const res = await JobSeekerService.getSchoolsByUserId(isLogged.id)
+            if(res){
+                  setData(res)
+            }  
+      }
+
+      useEffect(()=>{
+            init()
+      },[])
+
+
 
       return(<div>
+            <ToastContainer/>
             <button className="btn-green float-right" onClick={()=>{setAdd(true)}}>Ekle</button>
             <div className="py-4"></div>
             <div className="p-1">
@@ -58,13 +75,13 @@ const School = ()=>{
                         </TableHead>
                         <TableBody>
                               {data.map((row) => (
-                                    <TableRow key={row.name}>
+                                    <TableRow key={row.id}>
                                     <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {row.schoolName}
                                     </TableCell>
-                                    <TableCell align="right">{row.departmant}</TableCell>
-                                    <TableCell align="right">{row.start_year}</TableCell>
-                                    <TableCell align="right">{row.graduated_year}</TableCell>
+                                    <TableCell align="right">{row.department}</TableCell>
+                                    <TableCell align="right">{row.startYear}</TableCell>
+                                    <TableCell align="right">{row.graduatedYear}</TableCell>
                                     <TableCell align="right">
                                           <Button variant="contained" color="primary" className="mb-1" onClick={()=>{
                                                 setSchool(row)
@@ -85,9 +102,9 @@ const School = ()=>{
                         </Table>
                   </TableContainer>
             </div>
-            <Add open={add} setOpen={setAdd} />
-            <Edit open={edit} setOpen={setEdit} school={school}/>
-            <Delete open={del} setOpen={setDel} school={school} setData={setData} />
+            <Add open={add} setOpen={setAdd} init={init} toast={toast} />
+            <Edit open={edit} setOpen={setEdit} school={school} init={init} toast={toast}/>
+            <Delete open={del} setOpen={setDel} school={school} init={init} toast={toast} />
       </div>)
 }
 

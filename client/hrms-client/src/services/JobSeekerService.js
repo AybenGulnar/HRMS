@@ -57,7 +57,19 @@ const uploadImage = async (id,imgFile)=>{
       return res.data
 }
 
-const service = {getAll,getById,register,login,getExperiencesByUserId,getSchoolsByUserId,getForeignLanguagesByUserId,getSkillsByUserId,uploadImage}
+const updateMainInfo = async (id,firstName,lastName,yearOfBirth,introducingText)=>{
+      const res = await axios.post(url+"updateMainInfo?firstName="+firstName+"&id="+id+"&introducingText="+introducingText+"&lastName="+lastName+"&yearOfBirth="+yearOfBirth)
+
+      return res.data
+}
+
+const updateSocialMedia = async (id,github,linkedin)=>{
+      const res = await axios.post(url+"updateSocialMedia?github="+github+"&id="+id+"&linkedin="+linkedin)
+
+      return res.data
+}
+
+const service = {getAll,getById,register,login,updateSocialMedia,getExperiencesByUserId,updateMainInfo,getSchoolsByUserId,getForeignLanguagesByUserId,getSkillsByUserId,uploadImage}
 
 
 export default service

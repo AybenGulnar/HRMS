@@ -28,4 +28,8 @@ public interface JobSeekerService {
     List<Skill> getSkillsByUserId(int id);
 
     Result login(String eposta,String password);
+
+    Result updateMainInfo(int id,String firstName,String lastName,int yearOfBirth,String introducingText);
+
+    Result updateSocialMedia(int id,String github,String linkedin);
 }
