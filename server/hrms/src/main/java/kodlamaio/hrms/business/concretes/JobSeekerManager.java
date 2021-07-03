@@ -93,6 +93,40 @@ public class JobSeekerManager implements JobSeekerService {
     }
 
     @Override
+    public Result updateMainInfo(int id,String firstName, String lastName, int yearOfBirth, String introducingText) {
+        JobSeeker jobSeeker;
+        jobSeeker = this.jobSeekerDao.getById(id);
+
+        if(!Objects.isNull(jobSeeker)){
+            jobSeeker.setFirstName(firstName);
+            jobSeeker.setLastName(lastName);
+            jobSeeker.setYearOfBirth(yearOfBirth);
+            jobSeeker.setIntroducingText(introducingText);
+            this.jobSeekerDao.save(jobSeeker);
+
+            return new SuccessDataResult<JobSeeker>(jobSeeker,"Basarili");
+
+        }
+        return new ErrorResult("Hata");
+    }
+
+    @Override
+    public Result updateSocialMedia(int id, String github, String linkedin) {
+        JobSeeker jobSeeker;
+        jobSeeker = this.jobSeekerDao.getById(id);
+
+        if(!Objects.isNull(jobSeeker)){
+            jobSeeker.setGithub(github);
+            jobSeeker.setLinkedin(linkedin);
+            this.jobSeekerDao.save(jobSeeker);
+
+            return new SuccessDataResult<JobSeeker>(jobSeeker,"Basarili");
+
+        }
+        return new ErrorResult("Hata");
+    }
+
+    @Override
     public Result MailConfirm(EmailDto emailDto) {
 
         JobSeeker seeker;

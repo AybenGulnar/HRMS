@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SchoolDao extends JpaRepository<School, Integer> {
     List<School> getByJobSeeker_id(int id);
+    School getById(int id);
 }

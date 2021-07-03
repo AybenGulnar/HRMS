@@ -9,24 +9,27 @@ import { useTheme } from '@material-ui/core/styles';
 import { Form } from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import {useSelector} from "react-redux"
 
+//Services
+import SchoolService from "../../../services/SchoolService"
 
 const Schema = Yup.object().shape({
-      name: Yup.string()
+      schoolName: Yup.string()
             .min(2, 'Çok Kısa!')
             .max(50, 'Çok Uzun!')
             .required('Doldurmak Zorunlu!'),
-      departmant: Yup.string()
+      department: Yup.string()
             .min(2, 'Çok Kısa!')
             .max(50, 'Çok Uzun!')
             .required('Doldurmak Zorunlu!'),
-      start_year: Yup.number()
+      startYear: Yup.number()
             .typeError('Başlama Yılı Sayı Olmalı!')
             .required('Doldurmak Zorunlu!')
             .integer('Tam Sayı Olmak!')
             .min(1900, "1900'den küçük olamaz!")
             .max(2030, "2030'den büyük olamaz!"),
-      graduated_year: Yup.number()
+      graduatedYear: Yup.number()
             .typeError("Mezuniyet Yılı Sayı olmalı")
             .integer('Tam Sayı Olmak!')
             .min(1900, "1900'den küçük olamaz!")
@@ -34,9 +37,11 @@ const Schema = Yup.object().shape({
 });
 
 
-const Add = ({ open, setOpen }) => {
+const Add = ({ open, setOpen,init,toast }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+      
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const handleClose = () => {
             setOpen(false);
@@ -53,15 +58,33 @@ const Add = ({ open, setOpen }) => {
                   <DialogContent>
                         <Formik
                               initialValues={{
-                                    name: '',
-                                    departmant: '',
-                                    start_year: '',
-                                    graduated_year: ''
+                                    schoolName: '',
+                                    department: '',
+                                    startYear: '',
+                                    graduatedYear: ''
                               }}
                               validationSchema={Schema}
                               onSubmit={async values => {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    alert(JSON.stringify(values, null, 2));
+                                    const res = await SchoolService.add(
+                                          {
+                                                schoolName: values.schoolName,
+                                                department: values.department,
+                                                startYear: values.startYear,
+                                                graduatedYear: values.graduatedYear,
+                                                jobSeeker:{
+                                                      id:isLogged.id
+                                                }
+                                          }
+                                    )
+                                    if(res.success){
+                                          toast.success("Okul Eklendi...")
+                                          console.log(res)
+                                          init()
+                                          handleClose()
+                                    }
+                                    else{
+                                          toast.error("Hata")
+                                    }
                               }}
                         >
                               {({ values,
@@ -76,56 +99,56 @@ const Add = ({ open, setOpen }) => {
                                           <Form.Group>
                                                 <Form.Label>Okul İsmi</Form.Label>
                                                 <Form.Control
-                                                      id="name"
+                                                      id="schoolName"
                                                       placeholder="Okul İsmi"
                                                       type="text"
-                                                      value={values.name}
+                                                      value={values.schoolName}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.name && touched.name && (
-                                                      <Form.Text className="text-danger">{errors.name}</Form.Text>
+                                                {errors.schoolName && touched.schoolName && (
+                                                      <Form.Text className="text-danger">{errors.schoolName}</Form.Text>
                                                 )}
 
                                           </Form.Group>
                                           <Form.Group >
                                                 <Form.Label>Departman</Form.Label>
                                                 <Form.Control
-                                                      id="departmant"
+                                                      id="department"
                                                       placeholder="Departman"
                                                       type="text"
-                                                      value={values.departmant}
+                                                      value={values.department}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.departmant && touched.departmant && (
-                                                      <Form.Text className="text-danger">{errors.departmant}</Form.Text>
+                                                {errors.department && touched.department && (
+                                                      <Form.Text className="text-danger">{errors.department}</Form.Text>
                                                 )}
 
                                           </Form.Group>
                                           <Form.Group >
                                                 <Form.Label>Başlama Yılı</Form.Label>
                                                 <Form.Control
-                                                      id="start_year"
+                                                      id="startYear"
                                                       placeholder="Başlama Yılı"
                                                       type="text"
-                                                      value={values.start_year}
+                                                      value={values.startYear}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.start_year && touched.start_year && (
-                                                      <Form.Text className="text-danger">{errors.start_year}</Form.Text>
+                                                {errors.startYear && touched.startYear && (
+                                                      <Form.Text className="text-danger">{errors.startYear}</Form.Text>
                                                 )}
 
                                           </Form.Group>
                                           <Form.Group >
                                                 <Form.Label>Mezuniyet Yılı</Form.Label>
                                                 <Form.Control
-                                                      id="graduated_year"
+                                                      id="graduatedYear"
                                                       type="text"
                                                       placeholder="Mezuniyet Yılı (Boş Geçilebilir)"
-                                                      value={values.graduated_year}
+                                                      value={values.graduatedYear}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.graduated_year && touched.graduated_year && (
-                                                      <Form.Text className="text-danger">{errors.graduated_year}</Form.Text>
+                                                {errors.graduatedYear && touched.graduatedYear && (
+                                                      <Form.Text className="text-danger">{errors.graduatedYear}</Form.Text>
                                                 )}
                                           </Form.Group>
                                           <DialogActions>

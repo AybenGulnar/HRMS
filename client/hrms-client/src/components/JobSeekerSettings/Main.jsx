@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react"
 import {Form,Button} from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import {useSelector} from "react-redux"
+import { ToastContainer, toast } from 'react-toastify';
+
+//Services
+import JobSeekerService from "../../services/JobSeekerService"
+
  
 const Schema = Yup.object().shape({
 isim: Yup.string()
@@ -13,15 +19,17 @@ soyisim: Yup.string()
       .max(30, 'Çok Uzun!')
       .required('Doldurmak Zorunlu!'),
 dogumYili: Yup.number()
-.typeError('Doğum Yılı Sayı Olmalı!')
-.required('Doldurmak Zorunlu!')
-.integer('Tam Sayı Olmak!')
-.min(1920,"1920'den küçük olamaz!")
-.max(2020,"2020'den büyük olamaz!")
+      .typeError('Doğum Yılı Sayı Olmalı!')
+      .required('Doldurmak Zorunlu!')
+      .integer('Tam Sayı Olmak!')
+      .min(1920,"1920'den küçük olamaz!")
+      .max(2020,"2020'den büyük olamaz!")
 
 });
 
 const Main = () => {
+
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const [data,setData] = useState({
             load:false,
@@ -33,14 +41,16 @@ const Main = () => {
 
       useEffect(()=>{
             const init = async () => {
-                  await new Promise(resolve => setTimeout(resolve, 500));
-                  setData({
-                        load:true,
-                        isim:'Omer',
-                        soyisim:'Bayramcavus',
-                        dogumYili:2000,
-                        aciklama:'akdnasdlnasdk'
-                  })
+                  const res = await JobSeekerService.getById(isLogged.id)
+                  if(res.success){
+                        setData({
+                              load:true,
+                              isim:res.data.firstName,
+                              soyisim:res.data.lastName,
+                              dogumYili:res.data.yearOfBirth,
+                              aciklama:res.data.introducingText
+                        })
+                  }  
             }
             init()
       },[])
@@ -59,8 +69,14 @@ const Main = () => {
                         }}
                         validationSchema={Schema}
                         onSubmit={async values => {
-                              await new Promise(resolve => setTimeout(resolve, 500));
-                              alert(JSON.stringify(values, null, 2));
+                              const res = await JobSeekerService.updateMainInfo(isLogged.id,values.isim,values.soyisim,values.dogumYili,values.aciklama)
+                              if(res.success){
+                                    toast.success("Bilgileriniz Güncellendi...")
+                              }
+                              else{
+                                    toast.error(res.message) 
+                              }
+                              
                             }}
                   >
                    {({ values,
@@ -87,6 +103,7 @@ const Main = () => {
                                     
                               </Form.Group>
                               <Form.Group >
+                                    <ToastContainer />
                                     <Form.Label>Soyisim</Form.Label>
                                     <Form.Control 
                                     id="soyisim"

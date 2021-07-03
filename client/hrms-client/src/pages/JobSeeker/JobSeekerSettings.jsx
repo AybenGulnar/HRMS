@@ -1,6 +1,7 @@
 import React from "react"
 import { Container, Row,Col } from "react-bootstrap"
 import {Switch, Route,useHistory } from "react-router-dom"
+import {useSelector} from "react-redux"
 
 import Hero from "../../Components/Hero"
 
@@ -22,16 +23,28 @@ const JobSeekerSettings = ()=>{
 
       let history = useHistory();
 
+      const isLogged = useSelector(state=> state.loggedReducer)
+
       useEffect(()=>{
+
+            if(!isLogged.isLogged || isLogged.isEmployer){
+                  history.push("/")
+            }
+
             const temp = window.location.href.split("/")
-            const param = temp[temp.length-1]
+            var param = temp[temp.length-1]
+
+            if(param === "ayarlar"){
+                  param = ""
+            }
+            
             setSelect(param)
       },[])
 
       const [select,setSelect] = useState("")
 
       const handleSelect = (e)=>{
-            const name = e.currentTarget.name
+            var name = e.currentTarget.name
 
             setSelect(name)
             history.push("/aday/ayarlar/"+name);

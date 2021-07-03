@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react"
 import {Form,Button} from "react-bootstrap"
 import { Formik } from 'formik';
-
+import {useSelector} from "react-redux"
+import { ToastContainer, toast } from 'react-toastify';
+//Services
+import JobSeekerService from "../../services/JobSeekerService"
 
 const SocialMedia = () => {
+
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const [data,setData] = useState({
             load:false,
@@ -13,11 +18,11 @@ const SocialMedia = () => {
 
       useEffect(()=>{
             const init = async () => {
-                  await new Promise(resolve => setTimeout(resolve, 500));
+                  const res = await JobSeekerService.getById(isLogged.id)
                   setData({
                         load:true,
-                        github:'OmBayus',
-                        linkedin:'Omer Bayramcavus'
+                        github:res.data.github,
+                        linkedin:res.data.linkedin
                   })
             }
             init()
@@ -34,8 +39,13 @@ const SocialMedia = () => {
                         linkedin:data.linkedin
                         }}
                         onSubmit={async values => {
-                              await new Promise(resolve => setTimeout(resolve, 500));
-                              alert(JSON.stringify(values, null, 2));
+                              const res = await JobSeekerService.updateSocialMedia(isLogged.id,values.github,values.linkedin)
+                              if(res.success){
+                                    toast.success("Bilgileriniz Güncellendi...")
+                              }
+                              else{
+                                    toast.error(res.message) 
+                              }
                             }}
                   >
                    {({ values,
@@ -47,6 +57,7 @@ const SocialMedia = () => {
                       handleSubmit
                   }) => (
                         <Form onSubmit={handleSubmit}>
+                              <ToastContainer/>
                               <Form.Group >
                                     <Form.Label>Github</Form.Label>
                                     <Form.Control 

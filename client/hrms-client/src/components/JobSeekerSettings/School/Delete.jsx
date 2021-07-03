@@ -7,8 +7,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
+//Services
+import SchoolService from "../../../services/SchoolService"
 
-const Delete = ({ open, setOpen,school,setData }) => {
+const Delete = ({ open, setOpen,school,toast,init }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -16,10 +18,16 @@ const Delete = ({ open, setOpen,school,setData }) => {
             setOpen(false);
       };
 
-      const Sil= ()=>{
-            setData(prevValue=>{
-                  return(prevValue.filter(item=>item.id !== school.id))
-            })
+      const Sil= async()=>{
+            const res = await SchoolService.deleteSchool(school.id)
+            if(res.success){
+                  toast.success("Okul Başarıyla Silindi...")
+                  init()
+                  handleClose()
+            }
+            else{
+                  toast.error("Hata")
+            }
 
             setOpen(false)
       }

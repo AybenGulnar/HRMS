@@ -75,6 +75,16 @@ public class JobSeekerController {
         return this.jobSeekerService.MailConfirm(emailDto);
     }
 
+    @PostMapping("/updateMainInfo")
+    public Result updateMainInfo(@RequestParam int id,@RequestParam String firstName, @RequestParam String lastName, @RequestParam int yearOfBirth, @RequestParam String introducingText){
+        return this.jobSeekerService.updateMainInfo(id,firstName,lastName,yearOfBirth,introducingText);
+    }
+
+    @PostMapping("/updateSocialMedia")
+    public Result updateSocialMedia(@RequestParam int id,@RequestParam String github, @RequestParam String linkedin){
+        return this.jobSeekerService.updateSocialMedia(id,github,linkedin);
+    }
+
     @GetMapping("/getSchoolsByUserId")
     public List<School> getSchoolsByUserId(@RequestParam int id){
         return this.jobSeekerService.getSchoolsByUserId(id);
