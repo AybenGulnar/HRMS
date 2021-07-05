@@ -10,6 +10,8 @@ import { Form } from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
 
+//Services
+import ForeignLanguageService from "../../../services/ForeignLanguageService"
 
 const Schema = Yup.object().shape({
       name: Yup.string()
@@ -25,7 +27,7 @@ const Schema = Yup.object().shape({
 });
 
 
-const Edit = ({ open, setOpen,language }) => {
+const Edit = ({ open, setOpen,language,toast,init }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -49,8 +51,16 @@ const Edit = ({ open, setOpen,language }) => {
                               }}
                               validationSchema={Schema}
                               onSubmit={async values => {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    alert(JSON.stringify(values, null, 2));
+                                    const res = await ForeignLanguageService.updateForeignLanguage(language.id,values.name,values.level)
+                                    console.log(res)
+                                    if(res.success){
+                                          toast.success("Yabancı Dil Güncellendi...")
+                                          init()
+                                          handleClose()
+                                    }
+                                    else{
+                                          toast.error("Hata")
+                                    }
                               }}
                         >
                               {({ values,

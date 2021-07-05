@@ -30,4 +30,14 @@ public class ForeignLanguageController {
     public Result add(@RequestBody ForeignLanguage foreignLanguage){
         return this.foreignLanguageService.add(foreignLanguage);
     }
+
+    @PostMapping("/updateForeignLanguage")
+    public Result updateForeignLanguage(@RequestParam int id, @RequestParam String name,@RequestParam int level){
+        return this.foreignLanguageService.updateForeignLanguage(id,name,level);
+    }
+
+    @PostMapping("/deleteForeignLanguage")
+    public Result deleteForeignLanguage(@RequestParam int id){
+        return this.foreignLanguageService.deleteForeignLanguage(id);
+    }
 }

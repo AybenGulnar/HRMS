@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +8,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import {useSelector} from "react-redux"
+import { ToastContainer, toast } from 'react-toastify';
+
+//Services
+import JobSeekerService from "../../../services/JobSeekerService"
 
 //Components
 import Add from "./Add"
@@ -22,6 +27,7 @@ const useStyles = makeStyles({
 
 const Experience = ()=>{
       const classes = useStyles();
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const [add,setAdd] = useState(false)
       const [edit,setEdit] = useState(false)
@@ -31,15 +37,22 @@ const Experience = ()=>{
             id:0,
             companyName: '',
             position: '',
-            start_year: '',
-            leave_year: ''
+            startYear: '',
+            leaveYear: ''
       })
 
-      const [data,setData] = useState([
-            {id:1,companyName:'Gazi Üniversitesi', position:'Hoca',start_year:1999,leave_year:2004},
-            {id:2,companyName:'Microsoft', position:'Senior',start_year:2004,leave_year:2008},
-            {id:3,companyName:'Apple', position:'CTO',start_year:2012,leave_year:2016}
-          ])
+      const [data,setData] = useState([])
+
+      const init = async () => {
+            const res = await JobSeekerService.getExperiencesByUserId(isLogged.id)
+            if(res){
+                  setData(res)
+            }  
+      }
+
+      useEffect(()=>{
+            init()
+      },[])
 
       return(<div>
             <button className="btn-green float-right" onClick={()=>{setAdd(true)}}>Ekle</button>
@@ -63,8 +76,8 @@ const Experience = ()=>{
                                     {row.companyName}
                                     </TableCell>
                                     <TableCell align="right">{row.position}</TableCell>
-                                    <TableCell align="right">{row.start_year}</TableCell>
-                                    <TableCell align="right">{row.leave_year}</TableCell>
+                                    <TableCell align="right">{row.startYear}</TableCell>
+                                    <TableCell align="right">{row.leaveYear}</TableCell>
                                     <TableCell align="right">
                                           <Button variant="contained" color="primary" className="mb-1" onClick={()=>{
                                                 setExperience(row)
@@ -85,9 +98,10 @@ const Experience = ()=>{
                         </Table>
                   </TableContainer>
             </div>
-            <Add open={add} setOpen={setAdd} />
-            <Edit open={edit} setOpen={setEdit} experience={experience}/>
-            <Delete open={del} setOpen={setDel} experience={experience} setData={setData} />
+            <ToastContainer/>
+            <Add open={add} setOpen={setAdd} init={init} toast={toast}/>
+            <Edit open={edit} setOpen={setEdit} experience={experience} init={init} toast={toast}/>
+            <Delete open={del} setOpen={setDel} experience={experience} init={init} toast={toast}/>
       </div>)
 }
 

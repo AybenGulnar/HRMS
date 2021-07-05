@@ -78,7 +78,6 @@ const Add = ({ open, setOpen,init,toast }) => {
                                     )
                                     if(res.success){
                                           toast.success("Okul Eklendi...")
-                                          console.log(res)
                                           init()
                                           handleClose()
                                     }

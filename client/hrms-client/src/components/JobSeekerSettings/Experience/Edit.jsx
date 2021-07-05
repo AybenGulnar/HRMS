@@ -10,6 +10,8 @@ import { Form } from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
 
+//Services
+import ExperienceService from "../../../services/ExperienceService"
 
 const Schema = Yup.object().shape({
       companyName: Yup.string()
@@ -20,13 +22,13 @@ const Schema = Yup.object().shape({
             .min(2, 'Çok Kısa!')
             .max(50, 'Çok Uzun!')
             .required('Doldurmak Zorunlu!'),
-      start_year: Yup.number()
+      startYear: Yup.number()
             .typeError('Başlama Yılı Sayı Olmalı!')
             .required('Doldurmak Zorunlu!')
             .integer('Tam Sayı Olmak!')
             .min(1900, "1900'den küçük olamaz!")
             .max(2030, "2030'den büyük olamaz!"),
-      leave_year: Yup.number()
+      leaveYear: Yup.number()
             .typeError("Mezuniyet Yılı Sayı olmalı")
             .integer('Tam Sayı Olmak!')
             .min(1900, "1900'den küçük olamaz!")
@@ -34,7 +36,7 @@ const Schema = Yup.object().shape({
 });
 
 
-const Edit = ({ open, setOpen,experience }) => {
+const Edit = ({ open, setOpen,experience,init,toast }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -55,13 +57,21 @@ const Edit = ({ open, setOpen,experience }) => {
                               initialValues={{
                                     companyName: experience.companyName,
                                     position: experience.position,
-                                    start_year: experience.start_year,
-                                    leave_year: experience.leave_year
+                                    startYear: experience.startYear,
+                                    leaveYear: experience.leaveYear
                               }}
                               validationSchema={Schema}
                               onSubmit={async values => {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    alert(JSON.stringify(values, null, 2));
+                                    const res = await ExperienceService.updateExperience(experience.id,values.companyName,values.position,values.startYear,values.leaveYear)
+                                    console.log(res)
+                                    if(res.success){
+                                          toast.success("Tecrübe Güncellendi...")
+                                          init()
+                                          handleClose()
+                                    }
+                                    else{
+                                          toast.error("Hata")
+                                    }
                               }}
                         >
                               {({ values,
@@ -104,28 +114,28 @@ const Edit = ({ open, setOpen,experience }) => {
                                           <Form.Group >
                                                 <Form.Label>Başlama Yılı</Form.Label>
                                                 <Form.Control
-                                                      id="start_year"
+                                                      id="startYear"
                                                       placeholder="Başlama Yılı"
                                                       type="text"
-                                                      value={values.start_year}
+                                                      value={values.startYear}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.start_year && touched.start_year && (
-                                                      <Form.Text className="text-danger">{errors.start_year}</Form.Text>
+                                                {errors.startYear && touched.startYear && (
+                                                      <Form.Text className="text-danger">{errors.startYear}</Form.Text>
                                                 )}
 
                                           </Form.Group>
                                           <Form.Group >
                                                 <Form.Label>Mezuniyet Yılı</Form.Label>
                                                 <Form.Control
-                                                      id="leave_year"
+                                                      id="leaveYear"
                                                       type="text"
                                                       placeholder="Mezuniyet Yılı (Boş Geçilebilir)"
-                                                      value={values.leave_year}
+                                                      value={values.leaveYear}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.leave_year && touched.leave_year && (
-                                                      <Form.Text className="text-danger">{errors.leave_year}</Form.Text>
+                                                {errors.leaveYear && touched.leaveYear && (
+                                                      <Form.Text className="text-danger">{errors.leaveYear}</Form.Text>
                                                 )}
                                           </Form.Group>
                                           <DialogActions>

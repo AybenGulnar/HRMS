@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +8,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import {useSelector} from "react-redux"
+import { ToastContainer, toast } from 'react-toastify';
+
+//Services
+import JobSeekerService from "../../../services/JobSeekerService"
 
 //Components
 import Add from "./Add"
@@ -22,6 +27,7 @@ const useStyles = makeStyles({
 
 const Language = ()=>{
       const classes = useStyles();
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const [add,setAdd] = useState(false)
       const [edit,setEdit] = useState(false)
@@ -33,13 +39,21 @@ const Language = ()=>{
             level:''
       })
 
-      const [data,setData] = useState([
-            {id:1,name:'İngilizce', level:5},
-            {id:2,name:'Almanca', level:2},
-            {id:3,name:'İspanyolca', level:1}
-          ])
+      const [data,setData] = useState([])
+
+      const init = async () => {
+            const res = await JobSeekerService.getForeignLanguagesByUserId(isLogged.id)
+            if(res){
+                  setData(res)
+            }  
+      }
+
+      useEffect(()=>{
+            init()
+      },[])
 
       return(<div>
+            <ToastContainer/>
             <button className="btn-green float-right" onClick={()=>{setAdd(true)}}>Ekle</button>
             <div className="py-4"></div>
             <div className="p-1">
@@ -79,9 +93,9 @@ const Language = ()=>{
                         </Table>
                   </TableContainer>
             </div>
-            <Add open={add} setOpen={setAdd} />
-            <Edit open={edit} setOpen={setEdit} language={language}/>
-            <Delete open={del} setOpen={setDel} language={language} setData={setData} />
+            <Add open={add} setOpen={setAdd} init={init} toast={toast}/>
+            <Edit open={edit} setOpen={setEdit} language={language} init={init} toast={toast}/>
+            <Delete open={del} setOpen={setDel} language={language} init={init} toast={toast} />
       </div>)
 }
 

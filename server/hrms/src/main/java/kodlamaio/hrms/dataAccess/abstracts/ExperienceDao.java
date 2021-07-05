@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ExperienceDao extends JpaRepository<Experience, Integer> {
     List<Experience> getByJobSeeker_id(int id);
+    Experience getById(int id);
 }

@@ -31,4 +31,14 @@ public class SkillController {
     public Result add(@RequestBody Skill skill){
         return this.skillService.add(skill);
     }
+
+    @PostMapping("/updateSkill")
+    public Result updateSkill(@RequestParam int id, @RequestParam String name){
+        return this.skillService.updateSkill(id,name);
+    }
+
+    @PostMapping("/deleteSkill")
+    public Result deleteSkill(@RequestParam int id){
+        return this.skillService.deleteSkill(id);
+    }
 }
