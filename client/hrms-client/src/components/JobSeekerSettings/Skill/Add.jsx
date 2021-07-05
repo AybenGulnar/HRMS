@@ -9,7 +9,10 @@ import { useTheme } from '@material-ui/core/styles';
 import { Form } from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import {useSelector} from "react-redux"
 
+//Services
+import SkillService from "../../../services/SkillService"
 
 const Schema = Yup.object().shape({
       name: Yup.string()
@@ -19,9 +22,11 @@ const Schema = Yup.object().shape({
 });
 
 
-const Add = ({ open, setOpen }) => {
+const Add = ({ open, setOpen,toast,init }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const handleClose = () => {
             setOpen(false);
@@ -42,8 +47,22 @@ const Add = ({ open, setOpen }) => {
                               }}
                               validationSchema={Schema}
                               onSubmit={async values => {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    alert(JSON.stringify(values, null, 2));
+                                    const res = await SkillService.add(
+                                          {
+                                                name: values.name,
+                                                jobSeeker:{
+                                                      id:isLogged.id
+                                                }
+                                          }
+                                    )
+                                    if(res.success){
+                                          toast.success("Beceri Eklendi...")
+                                          init()
+                                          handleClose()
+                                    }
+                                    else{
+                                          toast.error("Hata")
+                                    }
                               }}
                         >
                               {({ values,

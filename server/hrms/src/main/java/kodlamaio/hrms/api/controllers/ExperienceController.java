@@ -30,4 +30,14 @@ public class ExperienceController {
     public Result add(@RequestBody Experience experience){
         return this.experienceService.add(experience);
     }
+
+    @PostMapping("/deleteSchool")
+    public Result deleteSchool(@RequestParam int id){
+        return this.experienceService.deleteExperience(id);
+    }
+
+    @PostMapping("/updateExperience")
+    public Result updateExperience(@RequestParam int id, @RequestParam String companyName, @RequestParam String position, @RequestParam int startYear, @RequestParam String leaveYear){
+        return this.experienceService.updateExperience(id,companyName, position, startYear, leaveYear);
+    }
 }

@@ -9,6 +9,10 @@ import { useTheme } from '@material-ui/core/styles';
 import { Form } from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import {useSelector} from "react-redux"
+
+//Services
+import ExperienceService from "../../../services/ExperienceService"
 
 
 const Schema = Yup.object().shape({
@@ -20,13 +24,13 @@ const Schema = Yup.object().shape({
             .min(2, 'Çok Kısa!')
             .max(50, 'Çok Uzun!')
             .required('Doldurmak Zorunlu!'),
-      start_year: Yup.number()
+      startYear: Yup.number()
             .typeError('Başlama Yılı Sayı Olmalı!')
             .required('Doldurmak Zorunlu!')
             .integer('Tam Sayı Olmak!')
             .min(1900, "1900'den küçük olamaz!")
             .max(2030, "2030'den büyük olamaz!"),
-      graduated_year: Yup.number()
+      leaveYear: Yup.number()
             .typeError("Çıkış Yılı Sayı olmalı")
             .integer('Tam Sayı Olmak!')
             .min(1900, "1900'den küçük olamaz!")
@@ -34,9 +38,11 @@ const Schema = Yup.object().shape({
 });
 
 
-const Add = ({ open, setOpen }) => {
+const Add = ({ open, setOpen,init,toast }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+      const isLogged = useSelector(state=> state.loggedReducer)
 
       const handleClose = () => {
             setOpen(false);
@@ -55,13 +61,30 @@ const Add = ({ open, setOpen }) => {
                               initialValues={{
                                     companyName: '',
                                     position: '',
-                                    start_year: '',
-                                    leave_year: ''
+                                    startYear: '',
+                                    leaveYear: ''
                               }}
                               validationSchema={Schema}
                               onSubmit={async values => {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    alert(JSON.stringify(values, null, 2));
+                                    const res = await ExperienceService.add(
+                                          {
+                                                companyName: values.companyName,
+                                                position: values.position,
+                                                startYear: values.startYear,
+                                                leaveYear: values.leaveYear,
+                                                jobSeeker:{
+                                                      id:isLogged.id
+                                                }
+                                          }
+                                    )
+                                    if(res.success){
+                                          toast.success("Tecrübe Eklendi...")
+                                          init()
+                                          handleClose()
+                                    }
+                                    else{
+                                          toast.error("Hata")
+                                    }
                               }}
                         >
                               {({ values,
@@ -104,28 +127,28 @@ const Add = ({ open, setOpen }) => {
                                           <Form.Group >
                                                 <Form.Label>Başlama Yılı</Form.Label>
                                                 <Form.Control
-                                                      id="start_year"
+                                                      id="startYear"
                                                       placeholder="Başlama Yılı"
                                                       type="text"
-                                                      value={values.start_year}
+                                                      value={values.startYear}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.start_year && touched.start_year && (
-                                                      <Form.Text className="text-danger">{errors.start_year}</Form.Text>
+                                                {errors.startYear && touched.startYear && (
+                                                      <Form.Text className="text-danger">{errors.startYear}</Form.Text>
                                                 )}
 
                                           </Form.Group>
                                           <Form.Group >
                                                 <Form.Label>Çıkış Yılı</Form.Label>
                                                 <Form.Control
-                                                      id="leave_year"
+                                                      id="leaveYear"
                                                       type="text"
                                                       placeholder="Çıkış Yılı (Boş Geçilebilir)"
-                                                      value={values.leave_year}
+                                                      value={values.leaveYear}
                                                       onChange={handleChange}
                                                       onBlur={handleBlur} />
-                                                {errors.leave_year && touched.leave_year && (
-                                                      <Form.Text className="text-danger">{errors.leave_year}</Form.Text>
+                                                {errors.leaveYear && touched.leaveYear && (
+                                                      <Form.Text className="text-danger">{errors.leaveYear}</Form.Text>
                                                 )}
                                           </Form.Group>
                                           <DialogActions>

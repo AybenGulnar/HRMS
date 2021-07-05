@@ -7,8 +7,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
+//Services
+import SkillService from "../../../services/SkillService"
 
-const Delete = ({ open, setOpen,skill,setData }) => {
+const Delete = ({ open, setOpen,skill,toast,init }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -16,12 +18,16 @@ const Delete = ({ open, setOpen,skill,setData }) => {
             setOpen(false);
       };
 
-      const Sil= ()=>{
-            setData(prevValue=>{
-                  return(prevValue.filter(item=>item.id !== skill.id))
-            })
-
-            setOpen(false)
+      const Sil= async()=>{
+            const res = await SkillService.deleteSkill(skill.id)
+            if(res.success){
+                  toast.success("Beceri Başarıyla Silindi...")
+                  init()
+                  handleClose()
+            }
+            else{
+                  toast.error("Hata")
+            }
       }
 
       return (

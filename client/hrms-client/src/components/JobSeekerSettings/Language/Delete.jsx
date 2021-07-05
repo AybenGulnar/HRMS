@@ -7,8 +7,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
+//Services
+import ForeignLanguageService from "../../../services/ForeignLanguageService"
 
-const Delete = ({ open, setOpen,language,setData }) => {
+const Delete = ({ open, setOpen,language,toast,init }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -16,12 +18,16 @@ const Delete = ({ open, setOpen,language,setData }) => {
             setOpen(false);
       };
 
-      const Sil= ()=>{
-            setData(prevValue=>{
-                  return(prevValue.filter(item=>item.id !== language.id))
-            })
-
-            setOpen(false)
+      const Sil= async()=>{
+            const res = await ForeignLanguageService.deleteForeignLanguage(language.id)
+            if(res.success){
+                  toast.success("Yabancı Dil Başarıyla Silindi...")
+                  init()
+                  handleClose()
+            }
+            else{
+                  toast.error("Hata")
+            }
       }
 
       return (

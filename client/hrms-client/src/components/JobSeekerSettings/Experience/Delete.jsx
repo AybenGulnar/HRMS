@@ -7,9 +7,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
+//Services
+import ExperienceService from "../../../services/ExperienceService"
 
-
-const Delete = ({ open, setOpen,experience,setData }) => {
+const Delete = ({ open, setOpen,experience,toast,init  }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -17,12 +18,16 @@ const Delete = ({ open, setOpen,experience,setData }) => {
             setOpen(false);
       };
 
-      const Sil= ()=>{
-            setData(prevValue=>{
-                  return(prevValue.filter(item=>item.id !== experience.id))
-            })
-
-            setOpen(false)
+      const Sil= async()=>{
+            const res = await ExperienceService.deleteExperience(experience.id)
+            if(res.success){
+                  toast.success("Tecrübe Başarıyla Silindi...")
+                  init()
+                  handleClose()
+            }
+            else{
+                  toast.error("Hata")
+            }
       }
 
       return (

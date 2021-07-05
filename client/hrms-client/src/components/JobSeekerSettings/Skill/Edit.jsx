@@ -10,6 +10,8 @@ import { Form } from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
 
+//Services
+import SkillService from "../../../services/SkillService"
 
 const Schema = Yup.object().shape({
       name: Yup.string()
@@ -19,7 +21,7 @@ const Schema = Yup.object().shape({
 });
 
 
-const Edit = ({ open, setOpen,skill }) => {
+const Edit = ({ open, setOpen,skill,toast,init }) => {
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -42,8 +44,16 @@ const Edit = ({ open, setOpen,skill }) => {
                               }}
                               validationSchema={Schema}
                               onSubmit={async values => {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    alert(JSON.stringify(values, null, 2));
+                                    const res = await SkillService.updateSkill(skill.id,values.name)
+                                    console.log(res)
+                                    if(res.success){
+                                          toast.success("Beceri Güncellendi...")
+                                          init()
+                                          handleClose()
+                                    }
+                                    else{
+                                          toast.error("Hata")
+                                    }
                               }}
                         >
                               {({ values,
