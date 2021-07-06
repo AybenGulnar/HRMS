@@ -20,15 +20,22 @@ import EmployerRegister from "./pages/Employer/EmployerRegister"
 import JobSeekerSettings from "./pages/JobSeeker/JobSeekerSettings"
 import EmployerSettings from "./pages/Employer/EmployerSettings"
 import JobAdvert from "./pages/Employer/JobAdvert"
+import PanelLogin from "./pages/Admin/PanelLogin"
 
 
 const App = ()=> {
   return (
     <Switch>
+      
+      <Route path="/panel/login">
+        <PanelLogin/>
+      </Route>
 
       <Route path="/panel/">
         <Panel/>
       </Route>
+
+      
 
       <Route path="/">
         <Navi/>

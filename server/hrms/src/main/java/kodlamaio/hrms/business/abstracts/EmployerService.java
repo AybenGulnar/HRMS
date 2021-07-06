@@ -11,6 +11,8 @@ public interface EmployerService {
     List<Employer> getall();
     Result getById(int id);
     Result register(EmployerDto employerDto);
-    Result MailConfirm(EmailDto emailDto);
+    Result MailConfirm(int id);
     Result login(String eposta,String password);
+    Result updateEmployer(int id,String firstName,String lastName,int yearOfBirth,String companyName,String phoneNumber,String website);
+    Result updateEmployerUpdated(int id,boolean isUpdated);
 }

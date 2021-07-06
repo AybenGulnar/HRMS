@@ -58,7 +58,7 @@ const JobSeekerLogin = () => {
             if(isLogged.isLogged){
                   history.push("/")
             }
-      },[])
+      },[isLogged,history])
 
       const handleChange = (e)=>{
 
@@ -82,7 +82,7 @@ const JobSeekerLogin = () => {
             e.preventDefault()
             const res = await JobSeekerService.login(user.email,user.pass)
             if(res.success){
-                  dispatch(AuthAction.sigin(false,res.data.id,(res.data.firstName + " " +res.data.lastName)))
+                  dispatch(AuthAction.sigin(false,res.data.id,(res.data.firstName + " " +res.data.lastName),res.data.imageUrl))
                   history.push("/")
                   
             }else{

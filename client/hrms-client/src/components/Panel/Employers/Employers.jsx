@@ -19,11 +19,10 @@ import { Container,Row,Col } from "react-bootstrap"
 import Confirm from "./Confirm"
 import Detail from "./Detail"
 
-import styles from "../../../styles/PanelJobAdvert.module.css"
+import styles from "../../../styles/PanelEmployers.module.css"
 
 //Services
-import JobAdvertService from "../../../services/JobAdvertService"
-import CityService from "../../../services/CityService"
+import EmployerService from "../../../services/EmployerService"
 
 const useStyles = makeStyles((theme) => ({
       formControl: {
@@ -33,55 +32,50 @@ const useStyles = makeStyles((theme) => ({
       },
 }));
 
-const JobAdvertPage = ()=>{
+const Employers = ()=>{
       const classes = useStyles()
 
       const [detail,setDetail] = useState(false)
       const [confirm,setConfirm] = useState(false)
 
       const [data,setData] = useState([])
-      const [cities,setCities] = useState([])
       
       const [filter, setFilter] = useState({
-            name:"",
-            city:"",
-            type:"",
+            firstName:"",
             aktif:"",
       });
       const [filteredData, setfilteredData] = useState([]);
 
       const [select,setSelect] = useState({
-            jobAdvertId: 0,
-            job: {
-                  title: "",
-                  id:0
-            },
-            description: "",
-            city: {
-                  name: ""
-            },
-            salaryMin: 0,
-            salaryMax: 0,
-            openPositionCount: 0,
-            deadline: "",
-            publishingDate: "",
-            employer: {
-                  companyName: "",
-            },
             actived: false,
-            fullTime: false,
-            remote: false
+            companyName: "",
+            eposta: "",
+            firstName: "",
+            id: 0,
+            identityNo: 0,
+            lastName: "",
+            password: "",
+            phoneNumber: "",
+            ucompanyName: "",
+            ufirstName: "",
+            ulastName: "",
+            updated: false,
+            uphoneNumber: "",
+            uwebsite: "",
+            uyearOfBirth: 0,
+            website: "",
+            yearOfBirth: 0,
+
       })
       
       useEffect(()=>{
             const init = async ()=>{
-                  const resCity = await CityService.getAll()
 
-                  var resData = await JobAdvertService.getAll()
+                  var res = await EmployerService.getAll()
+                  console.log(res)
 
-                  setCities(resCity.data)
-                  setData(resData.data)
-                  setfilteredData(resData.data)
+                  setData(res)
+                  setfilteredData(res)
 
             }
             init()
@@ -93,12 +87,6 @@ const JobAdvertPage = ()=>{
                   if(name === "name"){
                         return({...prevValue,name:value})
                   }
-                  else if(name === "city"){
-                        return({...prevValue,city:value})
-                  }
-                  else if(name === "type"){
-                        return({...prevValue,type:value})
-                  }
                   else if(name === "aktif"){
                         return({...prevValue,aktif:value})
                   }
@@ -109,20 +97,14 @@ const JobAdvertPage = ()=>{
 
       const Filter = ()=>{
             var temp = [...data]
-            
-            temp = temp.filter(item => item.job.title.toLowerCase().includes(filter.name.toLowerCase()))
-            temp = temp.filter(item => item.city.name.toLowerCase().includes(filter.city.toLowerCase()))
-            if(filter.type !== ""){
-                  const isFulltime = filter.type === "Tam Zamanlı" ? true : false;
-                  console.log(isFulltime)
-                  temp = temp.filter(item => item.fullTime === isFulltime)
-            }
 
+            temp = temp.filter(item => item.firstName.toLowerCase().includes(filter.firstName.toLowerCase()))
+            
             if(filter.aktif !== ""){
                   const isActive = filter.aktif === "Aktif" ? true : false;
                   temp = temp.filter(item => item.actived === isActive)
             }
-            
+
 
             setfilteredData(temp)
       }
@@ -132,38 +114,7 @@ const JobAdvertPage = ()=>{
                   <Row>
                         <Col lg={3} className={styles.filter}>
                               <h3>Filtre</h3>
-                              <TextField label="İş Bul" name="name" className="mb-3 w-100" variant="outlined" onChange={handleChange} value={filter.name} />
-                              <FormControl variant="outlined" className={classes.formControl + " mb-3"}>
-                                    <InputLabel id="sehir">Şehir</InputLabel>
-                                    <Select
-                                    labelId="sehir"
-                                    native
-                                    name="city"
-                                    value={filter.city}
-                                    onChange={handleChange}
-                                    label="Şehir"
-                                    >
-                                    <option aria-label="None" value="" />
-                                    {cities.map(item=>(
-                                          <option key={item.cityId}>{item.name}</option>
-                                    ))}
-                                    </Select>
-                              </FormControl>
-                              <FormControl variant="outlined" className={classes.formControl +" mb-3"}>
-                                    <InputLabel id="type">Çalışma Türü</InputLabel>
-                                    <Select
-                                    labelId="type"
-                                    native
-                                    name="type"
-                                    value={filter.type}
-                                    onChange={handleChange}
-                                    label="Çalışma Türü"
-                                    >
-                                    <option aria-label="None" value="" />
-                                    <option>Tam Zamanlı</option>
-                                    <option>Yarı Zamanlı</option>
-                                    </Select>
-                              </FormControl>
+                              <TextField label="İsmi ile Bul" name="name" className="mb-3 w-100" variant="outlined" onChange={handleChange} value={filter.firstName} />
                               <FormControl variant="outlined" className={classes.formControl +" mb-3"}>
                                     <InputLabel id="aktif">Aktif</InputLabel>
                                     <Select
@@ -185,7 +136,7 @@ const JobAdvertPage = ()=>{
                         <div className={styles.job_list_text}>
                               <div className="row align-items-center">
                                     <div className="col-md-6">
-                                          <h4>İş İlanları</h4>
+                                          <h4>İş Verenler</h4>
                                     </div>
                               </div>
                         </div>
@@ -194,8 +145,8 @@ const JobAdvertPage = ()=>{
                                     <Table className={classes.table} aria-label="simple table">
                                           <TableHead>
                                                 <TableRow>
-                                                      <TableCell><b>İş ismi</b></TableCell>
-                                                      <TableCell align="right"><b>Çalışma Türü</b></TableCell>
+                                                      <TableCell><b>İsim</b></TableCell>
+                                                      <TableCell align="right"><b>Güncel</b></TableCell>
                                                       <TableCell align="right"><b>Aktif</b></TableCell>
                                                       <TableCell align="right"><b>İşlemler</b></TableCell>
                                                       
@@ -203,11 +154,11 @@ const JobAdvertPage = ()=>{
                                           </TableHead>
                                           <TableBody>
                                                 {filteredData.map((row) => (
-                                                      <TableRow key={row.jobAdvertId}>
+                                                      <TableRow key={row.id}>
                                                             <TableCell component="th" scope="row">
-                                                                  {row.job.title}
+                                                                  {row.firstName + " " + row.lastName}
                                                             </TableCell>
-                                                            <TableCell align="right">{row.fullTime?"Tam Zamanlı" : "Yarı Zamanlı"}</TableCell>
+                                                            <TableCell align="right">{row.updated?"Güncel" : "Onay Bekleniyor..."}</TableCell>
                                                             <TableCell align="right">{row.actived? "Aktif":"Onay Bekleniyor..."}</TableCell>
                                                             <TableCell align="right">
                                                                   <Button variant="contained" color="" className="mb-1" onClick={() => {
@@ -216,12 +167,12 @@ const JobAdvertPage = ()=>{
                                                                   }}>
                                                                         Detay
                                                                   </Button>
-                                                                  {row.actived ? <button class={styles.tick} onClick={() => {
+                                                                  {(row.actived && row.updated) ? <button className={styles.tick} disabled={true} onClick={() => {
                                                                         setSelect(row)
                                                                         setTimeout(() => { setConfirm(true) }, 500)
                                                                   }}>
                                                                         <i class="fas fa-check"></i>
-                                                                  </button>:<button class={styles.close} onClick={() => {
+                                                                  </button>:<button className={styles.close} onClick={() => {
                                                                         setSelect(row)
                                                                         setTimeout(() => { setConfirm(true) }, 500)
                                                                   }}>
@@ -243,4 +194,4 @@ const JobAdvertPage = ()=>{
       </>)
 }
 
-export default JobAdvertPage
+export default Employers

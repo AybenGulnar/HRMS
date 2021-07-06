@@ -26,7 +26,7 @@ const SocialMedia = () => {
                   })
             }
             init()
-      },[])
+      },[isLogged])
 
       if(!data.load){
             return(<div>Lütfen Bekleyiniz..</div>)

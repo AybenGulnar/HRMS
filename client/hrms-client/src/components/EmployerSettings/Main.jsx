@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react"
 import {Form,Button} from "react-bootstrap"
 import { Formik } from 'formik';
 import * as Yup from "yup";
+import {useSelector} from "react-redux"
+import { ToastContainer, toast } from 'react-toastify';
+
+//Services
+import EmployerService from "../../services/EmployerService"
  
 const Schema = Yup.object().shape({
       isim: Yup.string()
@@ -23,33 +28,50 @@ const Schema = Yup.object().shape({
 
 const Main = () => {
 
+      const isLogged = useSelector(state=> state.loggedReducer)
+
       const [data,setData] = useState({
             load:false,
             isim:'',
             soyisim:'',
             dogumYili:0,
-            aciklama:'',
             companyName:'',
             phone_number:'',
-            website:''
+            website:'',
+            updated:false
             })
 
       useEffect(()=>{
             const init = async () => {
-                  await new Promise(resolve => setTimeout(resolve, 500));
-                  setData({
-                        load:true,
-                        isim:'Omer',
-                        soyisim:'Bayramcavus',
-                        dogumYili:2000,
-                        aciklama:'akdnasdlnasdk',
-                        companyName:'Microsoft',
-                        phone_number:'+902412421',
-                        website:'www.google.com'
-                  })
+                  const res = await EmployerService.getById(isLogged.id)
+                  if(res.data.updated){
+                        setData({
+                              load:true,
+                              isim:res.data.firstName,
+                              soyisim:res.data.lastName,
+                              dogumYili:res.data.yearOfBirth,
+                              companyName:res.data.companyName,
+                              phone_number:res.data.phoneNumber,
+                              website:res.data.website,
+                              updated:res.data.updated
+                        })
+                  }
+                  else{
+                        setData({
+                              load:true,
+                              isim:res.data.ufirstName,
+                              soyisim:res.data.ulastName,
+                              dogumYili:res.data.uyearOfBirth,
+                              companyName:res.data.ucompanyName,
+                              phone_number:res.data.uphoneNumber,
+                              website:res.data.uwebsite,
+                              updated:res.data.updated
+                        })
+                  }
+                  
             }
             init()
-      },[])
+      },[isLogged])
 
       if(!data.load){
             return(<div>Lütfen Bekleyiniz..</div>)
@@ -61,15 +83,23 @@ const Main = () => {
                         isim:data.isim,
                         soyisim:data.soyisim,
                         dogumYili:data.dogumYili,
-                        aciklama:data.aciklama,
                         companyName:data.companyName,
                         phone_number:data.phone_number,
                         website:data.website
                         }}
                         validationSchema={Schema}
                         onSubmit={async values => {
-                              await new Promise(resolve => setTimeout(resolve, 500));
-                              alert(JSON.stringify(values, null, 2));
+                              const res = await EmployerService.updateEmployer(isLogged.id,values.isim,values.soyisim,values.dogumYili,values.companyName,values.phone_number,values.website)
+                              if(res.success){
+                                    setData(prevValue=>({
+                                          ...prevValue,
+                                          updated:res.data.updated
+                                    }))
+                                    toast.success("Güncelleme isteği gönderildi...")
+                              }
+                              else{
+                                    toast.error(res.message) 
+                              }
                             }}
                   >
                    {({ values,
@@ -81,6 +111,9 @@ const Main = () => {
                       handleSubmit
                   }) => (
                         <Form onSubmit={handleSubmit}>
+                              <ToastContainer/>
+                              <h2 className="float-right text-muted">{data.updated?"Güncel":"Güncellenmesi Bekleniyor"}</h2>
+                              <div className="py-3"/>
                               <Form.Group >
                                     <Form.Label>Isim</Form.Label>
                                     <Form.Control 
@@ -124,16 +157,6 @@ const Main = () => {
                                     
                               </Form.Group>
                               <Form.Group >
-                                    <Form.Label>Tanıtım Yazısı</Form.Label>
-                                    <Form.Control 
-                                    id="aciklama"
-                                    as="textarea" rows={3}
-                                    value={values.aciklama}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}/>
-                                    
-                              </Form.Group>
-                              <Form.Group >
                                     <Form.Label>Şirket İsmi</Form.Label>
                                     <Form.Control 
                                     id="companyName"
@@ -163,7 +186,7 @@ const Main = () => {
                                     onBlur={handleBlur}/>
                                     
                               </Form.Group>
-                              <Button variant="primary" type="submit" disabled={isSubmitting}>
+                              <Button variant="primary" type="submit" disabled={isSubmitting || !data.updated}>
                                     Kaydet
                               </Button>
                         </Form>)}

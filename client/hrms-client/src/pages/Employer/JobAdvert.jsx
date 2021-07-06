@@ -54,7 +54,7 @@ const JobAdvert = () => {
                   setData(res.data)
             }
             init()
-      },[])
+      },[history,isLogged])
 
 
       return (<>

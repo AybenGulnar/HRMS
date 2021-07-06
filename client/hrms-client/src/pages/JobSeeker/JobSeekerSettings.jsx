@@ -16,6 +16,7 @@ import Experience from "../../Components/JobSeekerSettings/Experience/Experience
 import Language from "../../Components/JobSeekerSettings/Language/Language";
 import Skill from "../../Components/JobSeekerSettings/Skill/Skill";
 import SocialMedia from "../../Components/JobSeekerSettings/SocialMedia";
+import Picture from "../../Components/JobSeekerSettings/Picture";
 
 
 
@@ -26,7 +27,6 @@ const JobSeekerSettings = ()=>{
       const isLogged = useSelector(state=> state.loggedReducer)
 
       useEffect(()=>{
-
             if(!isLogged.isLogged || isLogged.isEmployer){
                   history.push("/")
             }
@@ -39,7 +39,7 @@ const JobSeekerSettings = ()=>{
             }
             
             setSelect(param)
-      },[])
+      },[isLogged,history])
 
       const [select,setSelect] = useState("")
 
@@ -65,6 +65,7 @@ const JobSeekerSettings = ()=>{
                               className="w-100"
                               >
                                     <Button color={select === "" && "secondary"} name="" onClick={handleSelect}>Genel</Button>
+                                    <Button color={select === "resim" && "secondary"} name="resim" onClick={handleSelect}>Profil Resmi</Button>
                                     <Button color={select === "okullar" && "secondary"} name="okullar" onClick={handleSelect}>Okullar</Button>
                                     <Button color={select === "tecrubeler" && "secondary"} name="tecrubeler" onClick={handleSelect}>Tecrübeler</Button>
                                     <Button color={select === "diller" && "secondary"} name="diller" onClick={handleSelect}>Yabancı Diller</Button>
@@ -79,6 +80,10 @@ const JobSeekerSettings = ()=>{
                                     
                                                       <Route path="/aday/ayarlar/" exact>
                                                             <Main/>
+                                                      </Route>
+
+                                                      <Route path="/aday/ayarlar/resim">
+                                                            <Picture/>
                                                       </Route>
 
                                                       <Route path="/aday/ayarlar/okullar">

@@ -172,6 +172,8 @@ public class JobSeekerManager implements JobSeekerService {
 
         jobSeeker.setImageUrl(imgUrl);
 
+        this.jobSeekerDao.save(jobSeeker);
+
         return new SuccessDataResult<JobSeeker>(jobSeeker,"Başarılı");
     }
 

@@ -43,16 +43,16 @@ const Experience = ()=>{
 
       const [data,setData] = useState([])
 
-      const init = async () => {
+      const init = React.useCallback(async() => {
             const res = await JobSeekerService.getExperiencesByUserId(isLogged.id)
             if(res){
                   setData(res)
             }  
-      }
+      }, [isLogged])
 
       useEffect(()=>{
             init()
-      },[])
+      },[init])
 
       return(<div>
             <button className="btn-green float-right" onClick={()=>{setAdd(true)}}>Ekle</button>

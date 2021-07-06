@@ -106,7 +106,7 @@ public class JobSeekerController {
     }
 
     @PostMapping("/uploadImage")
-    public ResponseEntity<?> upload(@RequestParam MultipartFile multipartFile,@RequestParam int id) throws IOException {
+    public ResponseEntity<?> upload(@RequestParam int id,@RequestParam MultipartFile multipartFile) throws IOException {
 
         BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
         if(bufferedImage == null) {
