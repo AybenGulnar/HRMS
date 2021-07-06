@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {Switch, Route,Link} from "react-router-dom"
 import Cookies from 'js-cookie'
 import {Redirect} from "react-router-dom"
@@ -6,6 +6,7 @@ import {Redirect} from "react-router-dom"
 //Components
 import Main from '../../Components/Panel/Main';
 import JobAdvertPage from '../../Components/Panel/JobAdvert/JobAdvert';
+import Employers from '../../Components/Panel/Employers/Employers';
 
 //Material Ui
 import clsx from 'clsx';
@@ -89,8 +90,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const url = "http://localhost:4000/api/"
-
 export default function Panel() {
   const classes = useStyles();
   const theme = useTheme();
@@ -107,34 +106,6 @@ export default function Panel() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-//   const Auth = async ()=>{
-//     let token = Cookies.get("token")
-    
-//     const res = await axios.post((url+"user/auth"),{token:token})
-//     .catch(err=>{
-//       console.log(err)
-//     })
-
-//     if(res){
-//       if(res.data.auth){
-//         setAuth(true)
-//         setLoading({isloading:false})
-//       }
-//       else{
-//         setAuth(false)
-//         setLoading({isloading:false})
-//       }
-//     }
-//     else{
-//       setLoading({isloading:true,message:"Serverdan cevap alınamıyor!"})
-//     }
-    
-//   }
-
-//   useEffect(()=>{
-//     Auth()
-//   },[])
 
   if(loading.isloading){
     return(<div>
@@ -203,12 +174,6 @@ export default function Panel() {
           </List>
           <Divider />
           <List>
-              <Link to="/panel/jobseekers" style={{color:'black'}}>
-                    <ListItem button>
-                          <ListItemIcon><PeopleIcon /></ListItemIcon>
-                          <ListItemText primary={"İş Arayanlar"} />
-                    </ListItem>
-              </Link>
               <Link to="/panel/employers" style={{color:'black'}}>
                     <ListItem button>
                           <ListItemIcon><PeopleIcon /></ListItemIcon>
@@ -237,14 +202,12 @@ export default function Panel() {
                         <Main/>
                     </Route>
 
-                    <Route path="/panel/jobseekers">
-                          {/* <JobSeekers/> */}
-                    </Route>JobAdvertPage
                     <Route path="/panel/employers">
-                          {/* <Employers/> */}
+                      <Employers/>
                     </Route>
+
                     <Route path="/panel/jobadverts">
-                          <JobAdvertPage/>
+                      <JobAdvertPage/>
                     </Route>
 
               </Switch>

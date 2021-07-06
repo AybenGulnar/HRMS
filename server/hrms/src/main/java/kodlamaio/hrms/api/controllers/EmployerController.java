@@ -46,7 +46,17 @@ public class EmployerController {
     }
 
     @PostMapping("/confirmemail")
-    public Result confirmemail(@RequestBody EmailDto emailDto){
-        return this.employerService.MailConfirm(emailDto);
+    public Result confirmemail(@RequestParam int id){
+        return this.employerService.MailConfirm(id);
+    }
+
+    @PostMapping("/updateEmployer")
+    public Result updateEmployer(@RequestParam int id,@RequestParam String firstName, @RequestParam String lastName, @RequestParam int yearOfBirth, @RequestParam String companyName, @RequestParam String phoneNumber, @RequestParam String website){
+        return this.employerService.updateEmployer(id,firstName,lastName,yearOfBirth,companyName,phoneNumber,website);
+    }
+
+    @PostMapping("/updateEmployerUpdated")
+    public Result updateEmployerUpdated(@RequestParam int id,@RequestParam boolean isUpdated){
+        return this.employerService.updateEmployerUpdated(id,isUpdated);
     }
 }

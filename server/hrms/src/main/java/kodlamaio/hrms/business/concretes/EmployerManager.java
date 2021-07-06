@@ -61,7 +61,14 @@ public class EmployerManager implements EmployerService {
             return new ErrorResult("Tc no bulunamadı");
         }
 
-        Employer employer = new Employer();
+        Employer employer;
+        employer = this.employerDao.getByePosta(employerDto.getEmail());
+
+        if(!Objects.isNull(employer)){
+            return new ErrorResult("Email Sisteme Kayıtlı");
+        }
+
+        employer = new Employer();
         employer.setFirstName(employerDto.getFirstName());
         employer.setLastName(employerDto.getLastName());
         employer.setIdentityNo(employerDto.getIdentityNo());
@@ -72,6 +79,13 @@ public class EmployerManager implements EmployerService {
         employer.setCompanyName(employerDto.getCompanyName());
         employer.setWebsite(employerDto.getWebsite());
         employer.setPhoneNumber(employerDto.getPhoneNumber());
+        employer.setUfirstName(employerDto.getFirstName());
+        employer.setUlastName(employerDto.getLastName());
+        employer.setUyearOfBirth(employerDto.getBirthYear());
+        employer.setUcompanyName(employerDto.getCompanyName());
+        employer.setUphoneNumber(employerDto.getPhoneNumber());
+        employer.setUwebsite(employerDto.getWebsite());
+        employer.setUpdated(false);
 
         try {
             this.employerDao.save(employer);
@@ -98,13 +112,56 @@ public class EmployerManager implements EmployerService {
     }
 
     @Override
-    public Result MailConfirm(EmailDto emailDto) {
+    public Result updateEmployer(int id,String firstName, String lastName, int yearOfBirth, String companyName, String phoneNumber, String website) {
+        Employer employer;
+        employer = this.employerDao.getById(id);
+
+        if(!Objects.isNull(employer)){
+            employer.setUfirstName(firstName);
+            employer.setUlastName(lastName);
+            employer.setUyearOfBirth(yearOfBirth);
+            employer.setUcompanyName(companyName);
+            employer.setUphoneNumber(phoneNumber);
+            employer.setUwebsite(website);
+            employer.setUpdated(false);
+            this.employerDao.save(employer);
+            return new SuccessDataResult<Employer>(employer);
+        }
+
+        return new ErrorResult("Hata");
+    }
+
+    @Override
+    public Result updateEmployerUpdated(int id,boolean isUpdated) {
+        Employer employer = new Employer();
+        employer = this.employerDao.getById(id);
+
+        if(!Objects.isNull(employer)){
+            if(isUpdated){
+                employer.setFirstName(employer.getUfirstName());
+                employer.setLastName(employer.getUlastName());
+                employer.setYearOfBirth(employer.getUyearOfBirth());
+                employer.setCompanyName(employer.getUcompanyName());
+                employer.setPhoneNumber(employer.getUphoneNumber());
+                employer.setWebsite(employer.getUwebsite());
+            }
+
+            employer.setUpdated(isUpdated);
+            this.employerDao.save(employer);
+            return new SuccessDataResult<Employer>(employer);
+        }
+
+        return new ErrorResult("Hata");
+    }
+
+    @Override
+    public Result MailConfirm(int id) {
 
         Employer employer;
 
 
         try {
-            employer = this.employerDao.getOne(emailDto.getId());
+            employer = this.employerDao.getOne(id);
         }catch (Exception e){
             return new ErrorResult("İş veren bulunmadı");
         }
@@ -114,6 +171,7 @@ public class EmployerManager implements EmployerService {
         }
 
         employer.setActived(true);
+        employer.setUpdated(true);
 
         try {
             this.employerDao.save(employer);
