@@ -26,13 +26,13 @@ const Job = ()=>{
 
       const toggleFav = ()=>{
             if(isLogged.isLogged){
-                  const temp = Favs.find(item=>item.id == data.jobAdvertId)
+                  const temp = Favs.find(item=>Number(item.id) === Number(data.jobAdvertId))
                   console.log(temp)
                   if(!temp){
-                        dispatch(FavAction.ADD(data.jobAdvertId,data.job.title))
+                        dispatch(FavAction.ADD(Number(data.jobAdvertId),data.job.title))
                   }
                   else{
-                        dispatch(FavAction.DEL(data.jobAdvertId))
+                        dispatch(FavAction.DEL(Number(data.jobAdvertId)))
                   }
             }
       }
@@ -108,7 +108,7 @@ const Job = ()=>{
                                           </div>
                                           <div className={styles.right}>
                                                 <div>
-                                                      <button className={styles.heart_mark} style={Favs.find(item=>item.id == data.jobAdvertId) ? {backgroundColor:"#00D363"}:{}} onClick={toggleFav}> <i className="far fa-heart" style={Favs.find(item=>item.id == data.jobAdvertId) ? {color:"white"}:{}}></i> </button>
+                                                      <button className={styles.heart_mark} style={Favs.find(item=>Number(item.id) === Number(data.jobAdvertId)) ? {backgroundColor:"#00D363"}:{}} onClick={toggleFav}> <i className="far fa-heart" style={Favs.find(item=>Number(item.id) === Number(data.jobAdvertId)) ? {color:"white"}:{}}></i> </button>
                                                 </div>
                                           </div>
                                     </div>

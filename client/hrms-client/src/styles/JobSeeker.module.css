@@ -42,13 +42,16 @@
       float: left;
       width: 82px;
       height: 82px;
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
-      border-radius: 5px;
-      padding: 15px;
+      border-radius: 50%;
       background: #F5F7FA;
       margin-right: 25px;
       border: 1px solid #F0F0F0;
+}
+
+.thumb img{
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
 }
 
 .content p{

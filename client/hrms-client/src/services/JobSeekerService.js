@@ -52,7 +52,7 @@ const getSkillsByUserId = async (id)=>{
 }
 
 const uploadImage = async (id,imgFile)=>{
-      const res = await axios.post(url+"uploadimage",{id,imgFile})
+      const res = await axios.post(url+"uploadImage?id="+id,imgFile)
 
       return res.data
 }

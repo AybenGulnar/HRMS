@@ -44,16 +44,16 @@ const School = ()=>{
 
       const [data,setData] = useState([])
 
-      const init = async () => {
+      const init = React.useCallback(async() => {
             const res = await JobSeekerService.getSchoolsByUserId(isLogged.id)
             if(res){
                   setData(res)
             }  
-      }
+      }, [isLogged])
 
       useEffect(()=>{
             init()
-      },[])
+      },[init])
 
 
 

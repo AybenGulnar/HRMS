@@ -41,16 +41,16 @@ const Language = ()=>{
 
       const [data,setData] = useState([])
 
-      const init = async () => {
+      const init = React.useCallback(async() => {
             const res = await JobSeekerService.getForeignLanguagesByUserId(isLogged.id)
             if(res){
                   setData(res)
             }  
-      }
+      }, [isLogged])
 
       useEffect(()=>{
             init()
-      },[])
+      },[init])
 
       return(<div>
             <ToastContainer/>

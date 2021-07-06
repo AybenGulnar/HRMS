@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Switch, Route,Link} from "react-router-dom"
 import Cookies from 'js-cookie'
-import {Redirect} from "react-router-dom"
+import {useHistory} from "react-router-dom"
+import {useSelector} from "react-redux"
 
 //Components
 import Main from '../../Components/Panel/Main';
 import JobAdvertPage from '../../Components/Panel/JobAdvert/JobAdvert';
 import Employers from '../../Components/Panel/Employers/Employers';
+import PanelSettings from '../../Components/Panel/PanelSettings';
 
 //Material Ui
 import clsx from 'clsx';
@@ -29,6 +31,7 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PeopleIcon from '@material-ui/icons/People';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 
 const drawerWidth = 240;
@@ -94,10 +97,18 @@ export default function Panel() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  let history = useHistory();
   
+  const isLogged = useSelector(state=> state.adminReducer)
 
-  const [auth,setAuth] = useState(true)
-  const [loading,setLoading] = useState({isloading:false,message:"Cevap Bekleniyor..."})
+  const [loading,setLoading] = useState({isloading:true,message:"Cevap Bekleniyor..."})
+
+  useEffect(()=>{
+    if(!isLogged.isLogged){
+      history.push("/panel/login")
+    }
+    setLoading({isloading:false})
+  },[isLogged,history])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,106 +124,115 @@ export default function Panel() {
 
     </div>)
   }
-  else{
-
-    return (
-      <div className={classes.root}>
-        {!auth && <Redirect to="/login" />}
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap>
-              Panel
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-              <Link to="/panel/" style={{color:'black'}}>
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Panel
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+            <Link to="/panel/" style={{color:'black'}}>
+                  <ListItem button>
+                        <ListItemIcon><EqualizerIcon /></ListItemIcon>
+                        <ListItemText primary={"MainPage"} />
+                  </ListItem>
+            </Link>
+        </List>
+        <Divider />
+        <List>
+          <Link to="/panel/jobadverts" style={{color:'black'}}>
                     <ListItem button>
-                          <ListItemIcon><EqualizerIcon /></ListItemIcon>
-                          <ListItemText primary={"MainPage"} />
+                          <ListItemIcon><LibraryBooksIcon /></ListItemIcon>
+                          <ListItemText primary={"İş İlanları"} />
                     </ListItem>
-              </Link>
-          </List>
-          <Divider />
-          <List>
-            <Link to="/panel/jobadverts" style={{color:'black'}}>
-                      <ListItem button>
-                            <ListItemIcon><LibraryBooksIcon /></ListItemIcon>
-                            <ListItemText primary={"İş İlanları"} />
-                      </ListItem>
-              </Link>
-          </List>
-          <Divider />
-          <List>
-              <Link to="/panel/employers" style={{color:'black'}}>
-                    <ListItem button>
-                          <ListItemIcon><PeopleIcon /></ListItemIcon>
-                          <ListItemText primary={"İş Verenler"} />
-                    </ListItem>
-              </Link>
-          </List>
-          <Divider />
-          <List>
-              <Link to="/" onClick={()=>{Cookies.remove('token')}} style={{color:'black'}}>
-                    <ListItem button>
-                          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                          <ListItemText primary={"Logout"} />
-                    </ListItem>
-              </Link>
-          </List>
-        </Drawer>
-        <main
-          className={clsx(classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-              <div className={classes.drawerHeader} />
-              <Switch>
-                    <Route path="/panel/" exact>
-                        <Main/>
-                    </Route>
+            </Link>
+        </List>
+        <Divider />
+        <List>
+            <Link to="/panel/employers" style={{color:'black'}}>
+                  <ListItem button>
+                        <ListItemIcon><PeopleIcon /></ListItemIcon>
+                        <ListItemText primary={"İş Verenler"} />
+                  </ListItem>
+            </Link>
+        </List>
+        <Divider />
+        <List>
+          <Link to="/panel/ayarlar" style={{color:'black'}}>
+            <ListItem button>
+              <ListItemIcon><SettingsIcon/></ListItemIcon>
+              <ListItemText primary={"Ayarlar"} />
+            </ListItem>
+          </Link>
+        </List>
+        <Divider />
+        <List>
+            <Link to="/" onClick={()=>{Cookies.remove('token')}} style={{color:'black'}}>
+                  <ListItem button>
+                        <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                        <ListItemText primary={"Logout"} />
+                  </ListItem>
+            </Link>
+        </List>
+      </Drawer>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
+            <div className={classes.drawerHeader} />
+            <Switch>
+                  <Route path="/panel/" exact>
+                      <Main/>
+                  </Route>
 
-                    <Route path="/panel/employers">
-                      <Employers/>
-                    </Route>
+                  <Route path="/panel/employers">
+                    <Employers/>
+                  </Route>
 
-                    <Route path="/panel/jobadverts">
-                      <JobAdvertPage/>
-                    </Route>
+                  <Route path="/panel/jobadverts">
+                    <JobAdvertPage/>
+                  </Route>
 
-              </Switch>
-        </main>
-      </div>
-    );
-  }
+                  <Route path="/panel/ayarlar">
+                    <PanelSettings/>
+                  </Route>
+
+            </Switch>
+      </main>
+    </div>
+  );
 }

@@ -1,9 +1,10 @@
-const sigin = (isEmployer,id,name)=>{
+const sigin = (isEmployer,id,name,imageUrl)=>{
       return{
         type:'SIGN_IN',
         isEmployer:isEmployer,
         id:id,
-        name:name
+        name:name,
+        imageUrl:imageUrl
       }
 }
     

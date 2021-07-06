@@ -136,7 +136,7 @@ const Navi = ()=>{
                               aria-haspopup="true"
                               onClick={handleToggle}>
                                     <div className={styles.photo}>
-                                          <img src="https://cdn.kariyer.net/Website/Images/profile.jpg" alt=""/>
+                                          <img src={isLogged.imageUrl !== "" ? isLogged.imageUrl :"/profile.jpg"} alt=""/>
                                     </div>
                                     <div className={styles.name}>
                                           <div><span className="text-uppercase">{isLogged.name}</span></div>

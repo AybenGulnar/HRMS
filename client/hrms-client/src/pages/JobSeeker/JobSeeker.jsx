@@ -76,7 +76,7 @@ const JobSeeker = () => {
                                     <div className={styles.JobSeeker_element + " d-flex justify-content-between"}>
                                           <div className="d-flex align-items-center">
                                                 <div className={styles.thumb}>
-                                                      <img src="https://technext.github.io/job-board-2/img/svg_icon/1.svg" alt="" />
+                                                      <img src={data.imageUrl !== "" ? data.imageUrl :"/profile.jpg"} alt="" />
                                                 </div>
                                                 <div className={styles.content + " float-left"} >
                                                       <h4>{data.firstName + " " + data.lastName}</h4>

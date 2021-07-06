@@ -30,9 +30,15 @@ const Jobs = ()=>{
 
       const [data,setData] = useState([])
       const [cities,setCities] = useState([])
+
+      const [page,setPage] = useState(1)
       
-      const [filter, setFilter] = useState({name:"",city:"",type:""});
+      const [filter, setFilter] = useState({name:"",city:"",type:"",page:10});
       const [filteredData, setfilteredData] = useState([]);
+
+      const indexOfLastPost = page * filter.page
+      const indexOfFirstPost = indexOfLastPost-filter.page
+      const currentPosts = filteredData.slice(indexOfFirstPost,indexOfLastPost)
       
       useEffect(()=>{
             const init = async ()=>{
@@ -60,6 +66,9 @@ const Jobs = ()=>{
                   else if(name === "type"){
                         return({...prevValue,type:value})
                   }
+                  else if(name === "page"){
+                        return({...prevValue,page:Number(value)})
+                  }
             })
       };
 
@@ -68,7 +77,6 @@ const Jobs = ()=>{
       const Filter = ()=>{
             var temp = [...data]
             
-
             temp = temp.filter(item => item.job.title.toLowerCase().includes(filter.name.toLowerCase()))
             temp = temp.filter(item => item.city.name.toLowerCase().includes(filter.city.toLowerCase()))
             if(filter.type !== ""){
@@ -77,7 +85,6 @@ const Jobs = ()=>{
                   temp = temp.filter(item => item.fullTime === isFulltime)
             }
             
-
             setfilteredData(temp)
       }
 
@@ -130,13 +137,40 @@ const Jobs = ()=>{
                                                 <div className="col-md-6">
                                                       <h4>İş İlanları</h4>
                                                 </div>
+                                                <div className="col-md-6">
+                                                      <FormControl variant="outlined" className="float-right mb-3">
+                                                            <InputLabel id="page">Sayfa</InputLabel>
+                                                            <Select
+                                                            labelId="page"
+                                                            native
+                                                            name="page"
+                                                            value={filter.page}
+                                                            onChange={handleChange}
+                                                            label="Sayfa"
+                                                            >
+                                                            <option>10</option>
+                                                            <option>20</option>
+                                                            <option>50</option>
+                                                            <option>100</option>
+                                                            </Select>
+                                                      </FormControl>
+                                                </div>
                                           </div>
                                     </div>
                                     <div className={styles.job_list}>
-                                          {filteredData.length ? filteredData.map(item=>{
+                                          {filteredData.length ? currentPosts.map(item=>{
                                                 return(<JobElement key={item.jobAdvertId} name={item.job.title} city={item.city.name} type={item.fullTime} date={item.deadline} id={item.jobAdvertId}/>)
                                           }):<h4 className="text-center">İş İlanı Bulunamadı</h4>}
                                           
+                                    </div>
+                                    <div className="d-flex justify-content-center">
+                                          <div>
+                                                {Array.from({length: Math.ceil(filteredData.length / filter.page)}, (_, i) => i + 1).map(item=>(
+                                                      <button className={styles.number +" "+ (page === item && styles.active)} onClick={()=>setPage(item)}>
+                                                            {item}
+                                                      </button>
+                                                ))}
+                                          </div>
                                     </div>
                                     </Col>
                               </Row>

@@ -71,7 +71,7 @@ const Main = () => {
                   
             }
             init()
-      },[])
+      },[isLogged])
 
       if(!data.load){
             return(<div>Lütfen Bekleyiniz..</div>)
@@ -111,6 +111,7 @@ const Main = () => {
                       handleSubmit
                   }) => (
                         <Form onSubmit={handleSubmit}>
+                              <ToastContainer/>
                               <h2 className="float-right text-muted">{data.updated?"Güncel":"Güncellenmesi Bekleniyor"}</h2>
                               <div className="py-3"/>
                               <Form.Group >

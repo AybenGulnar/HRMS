@@ -58,7 +58,7 @@ const EmployerLogin = () => {
             if(isLogged.isLogged){
                   history.push("/")
             }
-      },[])
+      },[isLogged,history])
 
       const handleChange = (e)=>{
 
@@ -131,7 +131,7 @@ const EmployerLogin = () => {
                                           onChange={handleChange}
                                     />
                                     <FormControlLabel
-                                          control={<Checkbox value={user.remember} name="remember" color="primary" onChange={handleChange} color="primary" />}
+                                          control={<Checkbox value={user.remember} name="remember" color="primary" onChange={handleChange} />}
                                           label="Beni Hatırla"
                                     />
                                     <Button

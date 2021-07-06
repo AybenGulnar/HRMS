@@ -45,7 +45,8 @@ const JobAdvertPage = ()=>{
       const [filter, setFilter] = useState({
             name:"",
             city:"",
-            type:""
+            type:"",
+            aktif:"",
       });
       const [filteredData, setfilteredData] = useState([]);
 
@@ -98,6 +99,9 @@ const JobAdvertPage = ()=>{
                   else if(name === "type"){
                         return({...prevValue,type:value})
                   }
+                  else if(name === "aktif"){
+                        return({...prevValue,aktif:value})
+                  }
             })
       };
 
@@ -106,13 +110,17 @@ const JobAdvertPage = ()=>{
       const Filter = ()=>{
             var temp = [...data]
             
-
             temp = temp.filter(item => item.job.title.toLowerCase().includes(filter.name.toLowerCase()))
             temp = temp.filter(item => item.city.name.toLowerCase().includes(filter.city.toLowerCase()))
             if(filter.type !== ""){
                   const isFulltime = filter.type === "Tam Zamanlı" ? true : false;
                   console.log(isFulltime)
                   temp = temp.filter(item => item.fullTime === isFulltime)
+            }
+
+            if(filter.aktif !== ""){
+                  const isActive = filter.aktif === "Aktif" ? true : false;
+                  temp = temp.filter(item => item.actived === isActive)
             }
             
 
@@ -154,6 +162,21 @@ const JobAdvertPage = ()=>{
                                     <option aria-label="None" value="" />
                                     <option>Tam Zamanlı</option>
                                     <option>Yarı Zamanlı</option>
+                                    </Select>
+                              </FormControl>
+                              <FormControl variant="outlined" className={classes.formControl +" mb-3"}>
+                                    <InputLabel id="aktif">Aktif</InputLabel>
+                                    <Select
+                                    labelId="aktif"
+                                    native
+                                    name="aktif"
+                                    value={filter.aktif}
+                                    onChange={handleChange}
+                                    label="Aktif"
+                                    >
+                                    <option aria-label="None" value="" />
+                                    <option>Aktif</option>
+                                    <option>Aktif Degil</option>
                                     </Select>
                               </FormControl>
                               <button className={styles.btn_filter} onClick={Filter}>Filtrele</button>

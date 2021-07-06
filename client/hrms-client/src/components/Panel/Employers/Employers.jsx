@@ -42,6 +42,7 @@ const Employers = ()=>{
       
       const [filter, setFilter] = useState({
             firstName:"",
+            aktif:"",
       });
       const [filteredData, setfilteredData] = useState([]);
 
@@ -81,8 +82,15 @@ const Employers = ()=>{
       },[])
 
       const handleChange = (e) => {
-            const {value} = e.target
-            setFilter({firstName:value})
+            const {name,value} = e.target
+            setFilter(prevValue=>{
+                  if(name === "name"){
+                        return({...prevValue,name:value})
+                  }
+                  else if(name === "aktif"){
+                        return({...prevValue,aktif:value})
+                  }
+            })
       };
 
 
@@ -92,6 +100,12 @@ const Employers = ()=>{
 
             temp = temp.filter(item => item.firstName.toLowerCase().includes(filter.firstName.toLowerCase()))
             
+            if(filter.aktif !== ""){
+                  const isActive = filter.aktif === "Aktif" ? true : false;
+                  temp = temp.filter(item => item.actived === isActive)
+            }
+
+
             setfilteredData(temp)
       }
 
@@ -101,13 +115,28 @@ const Employers = ()=>{
                         <Col lg={3} className={styles.filter}>
                               <h3>Filtre</h3>
                               <TextField label="İsmi ile Bul" name="name" className="mb-3 w-100" variant="outlined" onChange={handleChange} value={filter.firstName} />
+                              <FormControl variant="outlined" className={classes.formControl +" mb-3"}>
+                                    <InputLabel id="aktif">Aktif</InputLabel>
+                                    <Select
+                                    labelId="aktif"
+                                    native
+                                    name="aktif"
+                                    value={filter.aktif}
+                                    onChange={handleChange}
+                                    label="Aktif"
+                                    >
+                                    <option aria-label="None" value="" />
+                                    <option>Aktif</option>
+                                    <option>Aktif Degil</option>
+                                    </Select>
+                              </FormControl>
                               <button className={styles.btn_filter} onClick={Filter}>Filtrele</button>
                         </Col>
                         <Col lg={9}>
                         <div className={styles.job_list_text}>
                               <div className="row align-items-center">
                                     <div className="col-md-6">
-                                          <h4>İş İlanları</h4>
+                                          <h4>İş Verenler</h4>
                                     </div>
                               </div>
                         </div>
