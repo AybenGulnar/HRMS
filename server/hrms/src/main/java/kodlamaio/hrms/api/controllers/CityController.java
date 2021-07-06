@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RestController
 @RequestMapping("/api/cities")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CityController {
 
     private CityService cityService;

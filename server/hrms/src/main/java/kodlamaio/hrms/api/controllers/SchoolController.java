@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RestController
 @RequestMapping("/api/schools")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SchoolController {
 
     private SchoolService schoolService;
@@ -21,9 +22,23 @@ public class SchoolController {
         this.schoolService = schoolService;
     }
 
+    @GetMapping("/getByJobSeeker")
+    public Result getByJobSeeker(@RequestParam int id){
+        return this.schoolService.getByJobSeeker_id(id);
+    }
+
+    @PostMapping("/updateSchool")
+    public Result updateSchool(@RequestParam int id, @RequestParam String schoolName, @RequestParam String department, @RequestParam int startYear, @RequestParam String graduatedYear){
+        return this.schoolService.updateSchool(id,schoolName,department,startYear,graduatedYear);
+    }
 
     @PostMapping("/add")
     public Result add(@RequestBody School school){
         return this.schoolService.add(school);
+    }
+
+    @PostMapping("/deleteSchool")
+    public Result deleteSchool(@RequestParam int id){
+        return this.schoolService.deleteSchool(id);
     }
 }

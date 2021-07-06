@@ -17,7 +17,7 @@ public class JobAdvert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="job_advert_id")
-    private int JobAdvertId;
+    private int jobAdvertId;
 
     @ManyToOne()
     @JoinColumn(name="job_id")
@@ -38,6 +38,12 @@ public class JobAdvert {
 
     @Column(name = "open_position_count")
     private int openPositionCount;
+
+    @Column(name ="is_remote")
+    private boolean isRemote;
+
+    @Column(name="is_full_time")
+    private boolean isFullTime;
 
     @Column(name = "deadline")
     private Date deadline;

@@ -1,5 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
+import kodlamaio.hrms.entities.concretes.*;
+import kodlamaio.hrms.entities.dtos.UserLoginDto;
 import org.springframework.http.ResponseEntity;
 import kodlamaio.hrms.core.services.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
 import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.entities.concretes.Experience;
-import kodlamaio.hrms.entities.concretes.JobSeeker;
-import kodlamaio.hrms.entities.concretes.School;
 import kodlamaio.hrms.entities.dtos.EmailDto;
 import kodlamaio.hrms.entities.dtos.JobSeekerRegisterDto;
 import org.springframework.validation.FieldError;
@@ -51,9 +50,19 @@ public class JobSeekerController {
         return this.jobSeekerService.getall();
     }
 
+    @GetMapping("/getById")
+    public Result getbyId(@RequestParam int id){
+        return this.jobSeekerService.getById(id);
+    }
+
     @PostMapping("/register")
     public Result register(@RequestBody JobSeekerRegisterDto jobSeekerRegisterDto){
         return this.jobSeekerService.register(jobSeekerRegisterDto);
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody UserLoginDto userLoginDto){
+        return this.jobSeekerService.login(userLoginDto.getEmail(),userLoginDto.getPassword());
     }
 
     @PostMapping("/add")
@@ -66,6 +75,16 @@ public class JobSeekerController {
         return this.jobSeekerService.MailConfirm(emailDto);
     }
 
+    @PostMapping("/updateMainInfo")
+    public Result updateMainInfo(@RequestParam int id,@RequestParam String firstName, @RequestParam String lastName, @RequestParam int yearOfBirth, @RequestParam String introducingText){
+        return this.jobSeekerService.updateMainInfo(id,firstName,lastName,yearOfBirth,introducingText);
+    }
+
+    @PostMapping("/updateSocialMedia")
+    public Result updateSocialMedia(@RequestParam int id,@RequestParam String github, @RequestParam String linkedin){
+        return this.jobSeekerService.updateSocialMedia(id,github,linkedin);
+    }
+
     @GetMapping("/getSchoolsByUserId")
     public List<School> getSchoolsByUserId(@RequestParam int id){
         return this.jobSeekerService.getSchoolsByUserId(id);
@@ -76,8 +95,18 @@ public class JobSeekerController {
         return this.jobSeekerService.getExperiencesByUserId(id);
     }
 
+    @GetMapping("/getForeignLanguagesByUserId")
+    public List<ForeignLanguage> getForeignLanguagesByUserId(@RequestParam int id){
+        return this.jobSeekerService.getForeignLanguagesByUserId(id);
+    }
+
+    @GetMapping("/getSkillsByUserId")
+    public List<Skill> getSkillsByUserId(@RequestParam int id){
+        return this.jobSeekerService.getSkillsByUserId(id);
+    }
+
     @PostMapping("/uploadImage")
-    public ResponseEntity<?> upload(@RequestParam MultipartFile multipartFile,@RequestParam int id) throws IOException {
+    public ResponseEntity<?> upload(@RequestParam int id,@RequestParam MultipartFile multipartFile) throws IOException {
 
         BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
         if(bufferedImage == null) {

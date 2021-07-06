@@ -11,3 +11,110 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+::selection{
+  background-color: black;
+  color: white;
+}
+
+.hero{
+  background-size: cover;
+  background-position: center;
+  padding: 182px 0 102px 0;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 0;
+  background-size: cover;
+  background-image: url("./assets/banner.png");
+}
+
+.hero h3{
+  font-size: 56px;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 0;
+  text-transform: capitalize;
+}
+
+.shadow{
+  box-shadow: 3px 3px 10px black !important;
+}
+
+.btn-green{
+  background: #00D363;
+  color: #fff;
+  display: inline-block;
+  padding: 11px 29px 11px 29px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  border: 0;
+  border: 1px solid transparent;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: #fff !important;
+  text-transform: capitalize;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.btn-green:hover{
+  color: #00D363 !important;
+  border: 1px solid #00D363;
+  background: transparent;
+}
+
+.hover-bg-dark:hover{
+  background-color: rgba(0, 0, 0, 0.138)!important;
+}
+
+/* Favotire */
+
+.fav-item{
+  padding: 5px 15px;
+}
+
+.fav-item span{
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fav-item span:hover{
+  opacity: 0.7;
+}
+
+.fav-item i{
+  color: red!important;
+  margin-left:5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.fav-item i:hover{
+  opacity: 0.7;
+}
+
+.dropzone-img{
+  max-width: 200px;
+  max-height: 200px;
+}
+.dropzone {
+text-align: center;
+padding: 20px;
+border: 2px dashed black;
+background-color: #fafafa;
+color: #bdbdbd;
+border-radius: 50px;
+margin: 20px 0;
+}
+
+.dropzone:focus{
+outline: none;
+border: 2px dashed blue;
+}

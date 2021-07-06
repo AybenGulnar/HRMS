@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RestController
 @RequestMapping("/api/jobadverts")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class JobAdvertController {
 
     private JobAdvertService jobAdvertService;
@@ -24,9 +25,24 @@ public class JobAdvertController {
         return this.jobAdvertService.getall();
     }
 
+    @GetMapping("/getById")
+    public Result getById(@RequestParam int id){
+        return this.jobAdvertService.getById(id);
+    }
+
     @PostMapping("/add")
     public Result add(@RequestBody JobAdvertDto jobAdvert){
         return this.jobAdvertService.add(jobAdvert);
+    }
+
+    @PostMapping("/deleteById")
+    public Result deleteById(@RequestParam int id){
+        return this.jobAdvertService.deleteById(id);
+    }
+
+    @PostMapping("/changeActive")
+    public Result changeActive(@RequestParam int id,@RequestParam boolean active){
+        return this.jobAdvertService.changeActive(id,active);
     }
 
     @GetMapping("/getbyactived")
@@ -42,5 +58,10 @@ public class JobAdvertController {
     @GetMapping("/getbyactiveandemployer")
     public Result getByActiveAndEmployer(@RequestParam boolean active,@RequestParam int id){
         return this.jobAdvertService.getByActiveAndEmployer(active,id);
+    }
+
+    @GetMapping("/getbyemployer")
+    public Result getByActiveAndEmployer(@RequestParam int id){
+        return this.jobAdvertService.getByEmployer(id);
     }
 }

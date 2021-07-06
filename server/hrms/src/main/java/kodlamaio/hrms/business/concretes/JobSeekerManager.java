@@ -7,18 +7,13 @@ import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobSeekerDao;
-import kodlamaio.hrms.entities.concretes.Experience;
-import kodlamaio.hrms.entities.concretes.JobSeeker;
-import kodlamaio.hrms.entities.concretes.School;
+import kodlamaio.hrms.entities.concretes.*;
 import kodlamaio.hrms.entities.dtos.EmailDto;
 import kodlamaio.hrms.entities.dtos.JobSeekerRegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JobSeekerManager implements JobSeekerService {
@@ -38,6 +33,18 @@ public class JobSeekerManager implements JobSeekerService {
     @Override
     public List<JobSeeker> getall() {
         return this.jobSeekerDao.findAll();
+    }
+
+    @Override
+    public Result getById(int id) {
+        JobSeeker jobSeeker = new JobSeeker();
+        jobSeeker = this.jobSeekerDao.getById(id);
+
+        if(!Objects.isNull(jobSeeker)){
+            return new SuccessDataResult<JobSeeker>(jobSeeker);
+        }
+
+        return new ErrorResult("Kullanıcı Bulunamadı");
     }
 
     @Override
@@ -69,6 +76,54 @@ public class JobSeekerManager implements JobSeekerService {
         }
 
         return new SuccessDataResult<JobSeeker>(jobSeeker,"İş arayan eklendi.");
+    }
+
+    public Result login(String eposta,String password){
+        JobSeeker jobSeeker = new JobSeeker();
+        jobSeeker = this.jobSeekerDao.getByePosta(eposta);
+
+        if(!Objects.isNull(jobSeeker)){
+            if(password.equals(jobSeeker.getPassword())){
+                return new SuccessDataResult<JobSeeker>(jobSeeker,"Girş Başarılı");
+            }
+        }
+
+        return new ErrorResult("Kullanıcı adı veya şifre yanlış");
+
+    }
+
+    @Override
+    public Result updateMainInfo(int id,String firstName, String lastName, int yearOfBirth, String introducingText) {
+        JobSeeker jobSeeker;
+        jobSeeker = this.jobSeekerDao.getById(id);
+
+        if(!Objects.isNull(jobSeeker)){
+            jobSeeker.setFirstName(firstName);
+            jobSeeker.setLastName(lastName);
+            jobSeeker.setYearOfBirth(yearOfBirth);
+            jobSeeker.setIntroducingText(introducingText);
+            this.jobSeekerDao.save(jobSeeker);
+
+            return new SuccessDataResult<JobSeeker>(jobSeeker,"Basarili");
+
+        }
+        return new ErrorResult("Hata");
+    }
+
+    @Override
+    public Result updateSocialMedia(int id, String github, String linkedin) {
+        JobSeeker jobSeeker;
+        jobSeeker = this.jobSeekerDao.getById(id);
+
+        if(!Objects.isNull(jobSeeker)){
+            jobSeeker.setGithub(github);
+            jobSeeker.setLinkedin(linkedin);
+            this.jobSeekerDao.save(jobSeeker);
+
+            return new SuccessDataResult<JobSeeker>(jobSeeker,"Basarili");
+
+        }
+        return new ErrorResult("Hata");
     }
 
     @Override
@@ -116,6 +171,8 @@ public class JobSeekerManager implements JobSeekerService {
         JobSeeker jobSeeker = this.jobSeekerDao.getById(id);
 
         jobSeeker.setImageUrl(imgUrl);
+
+        this.jobSeekerDao.save(jobSeeker);
 
         return new SuccessDataResult<JobSeeker>(jobSeeker,"Başarılı");
     }
@@ -180,6 +237,20 @@ public class JobSeekerManager implements JobSeekerService {
         }
 
         return experiences;
+    }
+
+    @Override
+    public List<ForeignLanguage> getForeignLanguagesByUserId(int id) {
+        JobSeeker jobSeeker = jobSeekerDao.getById(id);
+
+        return jobSeeker.getForeignLanguages();
+    }
+
+    @Override
+    public List<Skill> getSkillsByUserId(int id) {
+        JobSeeker jobSeeker = jobSeekerDao.getById(id);
+
+        return jobSeeker.getSkills();
     }
 
 }
